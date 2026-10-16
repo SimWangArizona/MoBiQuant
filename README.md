@@ -217,3 +217,20 @@ The `scripts/` directory contains exactly these two launchers per model. Their s
 
 - ✅ Algorithm and fake quantization
 - ⬜ Kernels and packed checkpoints
+
+## Acknowledgements
+
+Our implementation builds on the open-source code from [OmniQuant](https://github.com/OpenGVLab/OmniQuant). We thank its authors for sharing their work.
+
+## Welcome to cite us
+
+If you find MoBiQuant useful in your research, please consider citing our paper:
+
+```bibtex
+@article{wang2026mobiquant,
+  title={MoBiQuant: Mixture-of-Bits Quantization for Token-Adaptive Any-Precision LLM},
+  author={Wang, Dongwei and Kim, Jinhee and Han, Seokho and Gudovskiy, Denis and Nakata, Yohei and Okuno, Tomoyuki and Peong, KhayTze and Jeon, Kang Eun and Ko, Jong Hwan and Chen, Yiran and others},
+  journal={arXiv preprint arXiv:2602.20191},
+  year={2026}
+}
+```
