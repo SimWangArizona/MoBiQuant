@@ -1,4 +1,5 @@
 import os
+import json
 import sys
 import random
 import numpy as np
@@ -54,11 +55,13 @@ def collect_moe_stats(lm, args, dataloader, logger):
         if isinstance(module, QuantMoE):
             module.Mask_Router.to(dev)
 
+    sampled_bits = []
     # Run forward passes on calibration data to update router statistics
     for i, batch in enumerate(dataloader):
         if i >= args.nsamples: # only across args.nsamples
             break
         _ = lm.model(batch[0].to(dev))
+        sampled_bits.extend(module.get_effective_bits() for module in lm.model.modules() if isinstance(module, QuantMoE))
 
     # Collect statistics from all QuantMoE modules
     all_sparsity = []
@@ -93,7 +96,7 @@ def collect_moe_stats(lm, args, dataloader, logger):
 
     if all_sparsity:
         avg_sparsity = sum(all_sparsity) / len(all_sparsity)
-        avg_eff_bits = sum(all_eff_bits) / len(all_eff_bits)
+        avg_eff_bits = sum(sampled_bits) / len(sampled_bits)
 
         logger.info("=" * 80)
         logger.info(f"QuantMoE Statistics (collected over {args.nsamples} samples):")
@@ -189,6 +192,9 @@ def collect_moe_stats(lm, args, dataloader, logger):
             percentage = (count / total_tokens) * 100
             logger.info(f"Bits: {bit}, Tokens: {count}, Percentage: {percentage:.2f}%")
         logger.info("=" * 80)
+
+    return {"actual_bits": avg_eff_bits, "moe_modules": len(all_eff_bits),
+            "bits_measurement": "calibration mean over samples and MoE projections"} if all_eff_bits else {}
 
 
 @torch.no_grad()
@@ -383,6 +389,11 @@ def evaluate(lm, args, logger):
         lm.model.config.use_cache = False
         lm.model.eval()
         nlls = []
+        evaluated_tokens = 0
+        if args.limit > 0:
+            nsamples = min(nsamples, args.limit)
+        if nsamples == 0:
+            raise ValueError("Evaluation text is shorter than --seqlen")
         for i in tqdm(range(nsamples)):
             batch = testenc[:, (i * lm.seqlen) : ((i + 1) * lm.seqlen)].to(lm.device)
             if "opt" in args.net.lower():
@@ -397,17 +408,15 @@ def evaluate(lm, args, logger):
             shift_labels = testenc[:, (i * lm.seqlen) : ((i + 1) * lm.seqlen)][
                 :, 1:
             ].to(lm.model.lm_head.weight.device)
-            loss_fct = nn.CrossEntropyLoss()
+            loss_fct = nn.CrossEntropyLoss(reduction="sum")
             loss = loss_fct(
                 shift_logits.view(-1, shift_logits.size(-1)),
                 shift_labels.view(-1),
             )
-            neg_log_likelihood = loss.float() * lm.seqlen
-            nlls.append(neg_log_likelihood)
-            if i == args.limit:
-                break
+            nlls.append(loss.float())
+            evaluated_tokens += shift_labels.numel()
 
-        ppl = torch.exp(torch.stack(nlls).sum() / (nsamples * lm.seqlen))
+        ppl = torch.exp(torch.stack(nlls).sum() / evaluated_tokens)
         logger.info(f'{dataset} : {ppl.item()}')
         lm.model.config.use_cache = use_cache
         results[dataset] = ppl.item()
@@ -481,7 +490,7 @@ def main():
     # assert args.net in net_choices
     args.model_family = args.net.split('-')[0]
     lm = LMClass(args)
-    lm.seqlen = 2048
+    lm.seqlen = args.seqlen
     lm.model.eval()
     for param in lm.model.parameters():
         param.requires_grad = False
@@ -590,9 +599,21 @@ def main():
     if args.slice_bits_list is not None and (args.target_bit_eval != 2.0):
         calibrate_router_threshold(lm, args, dataloader, logger)
         results = evaluate(lm, args, logger)
-        collect_moe_stats(lm, args, dataloader, logger)
+        results.update(collect_moe_stats(lm, args, dataloader, logger))
     else:
         results = evaluate(lm, args, logger)
+        if args.slice_bits_list is not None:
+            results.update(actual_bits=float(args.slice_bits_list[0]),
+                           moe_modules=sum(isinstance(m, QuantMoE) for m in lm.model.modules()),
+                           bits_measurement="MSB-only; residual experts disabled")
+    if args.metrics_file:
+        results.update(model=args.model, target_bit_eval=args.target_bit_eval,
+                       target_bit_train=args.target_bit, seqlen=lm.seqlen)
+        metrics_path = Path(args.metrics_file)
+        metrics_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_path = metrics_path.with_suffix(metrics_path.suffix + ".tmp")
+        temporary_path.write_text(json.dumps(results, indent=2, allow_nan=False) + "\n")
+        temporary_path.replace(metrics_path)
 
     # Calculate combined score for multi-objective optimization
     if args.wandb:

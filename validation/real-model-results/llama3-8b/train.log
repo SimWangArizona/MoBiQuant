@@ -1,0 +1,943 @@
+/home/dwang/anaconda3/envs/omniquant/lib/python3.10/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+auto_gptq is required for real quantization
+['/tmp/mobiquant-migration/main_bitmoe.py', '--model', '/mnt/fast7T/models/Llama-3-8B', '--wbits', '2', '--abits', '16', '--group_size', '128', '--lwc', '--slice_bits_list', '2', '2', '2', '2', '--nsamples', '2', '--seqlen', '32', '--limit', '2', '--eval_ppl', '--epochs', '1', '--batch_size', '1', '--target_bit', '3', '--stage_weight', '1.0', '1.33', '--bitmoe_lr', '8e-5', '--reg_weight', '8e-5', '--lwc_lr', '1e-3', '--output_dir', '/tmp/mobiquant-audit-runs/llama3-8b/checkpoint', '--metrics_file', '/tmp/mobiquant-audit-runs/llama3-8b/checkpoint/train-metrics.json']
+[2026-10-16 12:24:37 root](main_bitmoe.py 486): INFO Namespace(metrics_file='/tmp/mobiquant-audit-runs/llama3-8b/checkpoint/train-metrics.json', seqlen=32, model='/mnt/fast7T/models/Llama-3-8B', cache_dir='./cache', output_dir='/tmp/mobiquant-audit-runs/llama3-8b/checkpoint', save_dir=None, resume=None, real_quant=False, calib_dataset='wikitext2', nsamples=2, batch_size=1, seed=2, tasks='', eval_ppl=True, num_fewshot=0, wbits=2, attnbits=4, abits=16, slice_bits_list=[2, 2, 2, 2], stage_weight=[1.0, 1.33], slice_bits_eval=0, bitmoe_lr=8e-05, group_size=128, alpha=0.5, let_lr=0.005, lwc_lr=0.001, wd=0, epochs=1, let=False, lwc=True, aug_loss=True, symmetric=False, disable_zero_point=False, a_dynamic_method='per_token', w_dynamic_method='per_channel', limit=2, multigpu=False, deactive_amp=False, attn_implementation='eager', net=None, act_scales=None, act_shifts=None, slicing=False, target_activation_ratio=None, target_bit=3.0, target_activation_ratio_eval=None, target_bit_eval=None, reg_weight=8e-05, onlymlp=False, wandb=False, wandb_project='test', wandb_name='test_run', stage_weight_1=None)
+[2026-10-16 12:24:37 root](main_bitmoe.py 487): INFO attn block bits: 4
+`torch_dtype` is deprecated! Use `dtype` instead!
+LlamaModel:  default
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:06,  2.08s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:03,  2.00s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:05<00:01,  1.72s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.16s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.43s/it]
+vocab size:  128000
+[2026-10-16 12:24:43 root](main_bitmoe.py 552): INFO === start quantization ===
+get_wikitext2
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:24:43 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:24:43 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:24:43 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:24:43 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:24:53 root](bitmoequant_llama3.py 53): INFO Starting ...
+[2026-10-16 12:24:54 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 0 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:24:56 root](bitmoequant_llama3.py 379): INFO layer 0 iter 0 loss:0.021066 norm:0.203414 sparsity:0.3534 eff_bits:5.879 max memory_allocated 16485.7979
+[2026-10-16 12:24:57 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 0 to router_stats.pth
+[2026-10-16 12:24:57 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 1 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:24:59 root](bitmoequant_llama3.py 379): INFO layer 1 iter 0 loss:1.796054 norm:nan sparsity:0.4665 eff_bits:5.201 max memory_allocated 16485.7979
+[2026-10-16 12:24:59 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 1 to router_stats.pth
+[2026-10-16 12:25:00 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 2 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:02 root](bitmoequant_llama3.py 379): INFO layer 2 iter 0 loss:0.545339 norm:0.132653 sparsity:0.2723 eff_bits:6.366 max memory_allocated 17749.4365
+[2026-10-16 12:25:03 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 2 to router_stats.pth
+[2026-10-16 12:25:03 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 3 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:05 root](bitmoequant_llama3.py 379): INFO layer 3 iter 0 loss:0.547821 norm:0.160130 sparsity:0.2946 eff_bits:6.232 max memory_allocated 18381.9434
+[2026-10-16 12:25:06 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 3 to router_stats.pth
+[2026-10-16 12:25:07 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 4 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:08 root](bitmoequant_llama3.py 379): INFO layer 4 iter 0 loss:0.547878 norm:0.210135 sparsity:0.3043 eff_bits:6.174 max memory_allocated 19013.9502
+[2026-10-16 12:25:11 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 4 to router_stats.pth
+[2026-10-16 12:25:11 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 5 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:13 root](bitmoequant_llama3.py 379): INFO layer 5 iter 0 loss:0.550712 norm:0.148998 sparsity:0.3013 eff_bits:6.192 max memory_allocated 19644.2070
+[2026-10-16 12:25:15 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 5 to router_stats.pth
+[2026-10-16 12:25:15 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 6 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:17 root](bitmoequant_llama3.py 379): INFO layer 6 iter 0 loss:0.550231 norm:0.137584 sparsity:0.2924 eff_bits:6.246 max memory_allocated 20278.3389
+[2026-10-16 12:25:20 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 6 to router_stats.pth
+[2026-10-16 12:25:20 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 7 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:22 root](bitmoequant_llama3.py 379): INFO layer 7 iter 0 loss:0.549384 norm:0.171382 sparsity:0.3192 eff_bits:6.085 max memory_allocated 20909.8457
+[2026-10-16 12:25:24 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 7 to router_stats.pth
+[2026-10-16 12:25:24 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 8 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:26 root](bitmoequant_llama3.py 379): INFO layer 8 iter 0 loss:0.552753 norm:0.180112 sparsity:0.2835 eff_bits:6.299 max memory_allocated 21539.1025
+[2026-10-16 12:25:29 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 8 to router_stats.pth
+[2026-10-16 12:25:29 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 9 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:31 root](bitmoequant_llama3.py 379): INFO layer 9 iter 0 loss:0.549912 norm:0.177726 sparsity:0.3482 eff_bits:5.911 max memory_allocated 22171.3594
+[2026-10-16 12:25:33 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 9 to router_stats.pth
+[2026-10-16 12:25:34 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 10 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:35 root](bitmoequant_llama3.py 379): INFO layer 10 iter 0 loss:0.558189 norm:0.148001 sparsity:0.3021 eff_bits:6.188 max memory_allocated 22803.6162
+[2026-10-16 12:25:41 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 10 to router_stats.pth
+[2026-10-16 12:25:41 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 11 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:43 root](bitmoequant_llama3.py 379): INFO layer 11 iter 0 loss:0.557345 norm:0.145609 sparsity:0.3036 eff_bits:6.179 max memory_allocated 23434.1230
+[2026-10-16 12:25:46 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 11 to router_stats.pth
+[2026-10-16 12:25:46 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 12 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:48 root](bitmoequant_llama3.py 379): INFO layer 12 iter 0 loss:0.559087 norm:0.162953 sparsity:0.2842 eff_bits:6.295 max memory_allocated 24066.1299
+[2026-10-16 12:25:52 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 12 to router_stats.pth
+[2026-10-16 12:25:52 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 13 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:25:54 root](bitmoequant_llama3.py 379): INFO layer 13 iter 0 loss:0.558443 norm:0.162502 sparsity:0.2984 eff_bits:6.210 max memory_allocated 24696.6367
+[2026-10-16 12:25:58 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 13 to router_stats.pth
+[2026-10-16 12:25:58 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 14 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:00 root](bitmoequant_llama3.py 379): INFO layer 14 iter 0 loss:0.559645 norm:0.177810 sparsity:0.2984 eff_bits:6.210 max memory_allocated 25328.6436
+[2026-10-16 12:26:05 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 14 to router_stats.pth
+[2026-10-16 12:26:05 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 15 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:07 root](bitmoequant_llama3.py 379): INFO layer 15 iter 0 loss:0.560654 norm:0.156727 sparsity:0.2790 eff_bits:6.326 max memory_allocated 25959.1504
+[2026-10-16 12:26:14 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 15 to router_stats.pth
+[2026-10-16 12:26:15 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 16 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:16 root](bitmoequant_llama3.py 379): INFO layer 16 iter 0 loss:0.563764 norm:0.186425 sparsity:0.2775 eff_bits:6.335 max memory_allocated 26589.6572
+[2026-10-16 12:26:23 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 16 to router_stats.pth
+[2026-10-16 12:26:23 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 17 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:25 root](bitmoequant_llama3.py 379): INFO layer 17 iter 0 loss:0.565224 norm:0.190553 sparsity:0.3289 eff_bits:6.027 max memory_allocated 27218.6641
+[2026-10-16 12:26:32 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 17 to router_stats.pth
+[2026-10-16 12:26:33 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 18 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:34 root](bitmoequant_llama3.py 379): INFO layer 18 iter 0 loss:0.567982 norm:0.175672 sparsity:0.3222 eff_bits:6.067 max memory_allocated 27847.9209
+[2026-10-16 12:26:41 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 18 to router_stats.pth
+[2026-10-16 12:26:41 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 19 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:43 root](bitmoequant_llama3.py 379): INFO layer 19 iter 0 loss:0.567729 norm:0.158368 sparsity:0.3333 eff_bits:6.000 max memory_allocated 28478.4277
+[2026-10-16 12:26:49 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 19 to router_stats.pth
+[2026-10-16 12:26:49 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 20 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:26:51 root](bitmoequant_llama3.py 379): INFO layer 20 iter 0 loss:0.571847 norm:0.166924 sparsity:0.3371 eff_bits:5.978 max memory_allocated 29111.6846
+[2026-10-16 12:26:58 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 20 to router_stats.pth
+[2026-10-16 12:26:58 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 21 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:00 root](bitmoequant_llama3.py 379): INFO layer 21 iter 0 loss:0.580260 norm:0.174880 sparsity:0.3311 eff_bits:6.013 max memory_allocated 29741.4414
+[2026-10-16 12:27:06 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 21 to router_stats.pth
+[2026-10-16 12:27:06 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 22 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:08 root](bitmoequant_llama3.py 379): INFO layer 22 iter 0 loss:0.583058 norm:0.182531 sparsity:0.3430 eff_bits:5.942 max memory_allocated 30373.1982
+[2026-10-16 12:27:14 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 22 to router_stats.pth
+[2026-10-16 12:27:14 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 23 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:16 root](bitmoequant_llama3.py 379): INFO layer 23 iter 0 loss:0.593542 norm:0.199881 sparsity:0.3088 eff_bits:6.147 max memory_allocated 31003.7051
+[2026-10-16 12:27:23 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 23 to router_stats.pth
+[2026-10-16 12:27:23 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 24 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:25 root](bitmoequant_llama3.py 379): INFO layer 24 iter 0 loss:0.596363 norm:0.170700 sparsity:0.3676 eff_bits:5.795 max memory_allocated 31634.2119
+[2026-10-16 12:27:34 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 24 to router_stats.pth
+[2026-10-16 12:27:34 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 25 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:36 root](bitmoequant_llama3.py 379): INFO layer 25 iter 0 loss:0.613740 norm:0.205547 sparsity:0.3274 eff_bits:6.036 max memory_allocated 32264.7188
+[2026-10-16 12:27:44 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 25 to router_stats.pth
+[2026-10-16 12:27:44 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 26 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:46 root](bitmoequant_llama3.py 379): INFO layer 26 iter 0 loss:0.623018 norm:0.215341 sparsity:0.3296 eff_bits:6.022 max memory_allocated 32894.2256
+[2026-10-16 12:27:53 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 26 to router_stats.pth
+[2026-10-16 12:27:53 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 27 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:55 root](bitmoequant_llama3.py 379): INFO layer 27 iter 0 loss:0.645455 norm:0.235955 sparsity:0.3400 eff_bits:5.960 max memory_allocated 33526.4824
+[2026-10-16 12:28:05 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 27 to router_stats.pth
+[2026-10-16 12:28:05 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 28 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:28:07 root](bitmoequant_llama3.py 379): INFO layer 28 iter 0 loss:0.660667 norm:0.199761 sparsity:0.2999 eff_bits:6.201 max memory_allocated 34155.2393
+[2026-10-16 12:28:17 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 28 to router_stats.pth
+[2026-10-16 12:28:17 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 29 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:28:19 root](bitmoequant_llama3.py 379): INFO layer 29 iter 0 loss:0.692961 norm:0.213425 sparsity:0.3713 eff_bits:5.772 max memory_allocated 34782.7461
+[2026-10-16 12:28:30 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 29 to router_stats.pth
+[2026-10-16 12:28:30 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 30 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:28:32 root](bitmoequant_llama3.py 379): INFO layer 30 iter 0 loss:0.756845 norm:0.352695 sparsity:0.3311 eff_bits:6.013 max memory_allocated 35415.0029
+[2026-10-16 12:28:43 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 30 to router_stats.pth
+[2026-10-16 12:28:43 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 31 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:28:45 root](bitmoequant_llama3.py 379): INFO layer 31 iter 0 loss:1.156207 norm:2.302136 sparsity:0.4048 eff_bits:5.571 max memory_allocated 36048.5098
+[2026-10-16 12:28:56 root](bitmoequant_llama3.py 432): INFO Saved router statistics for layer 31 to router_stats.pth
+[2026-10-16 12:28:56 root](main_bitmoe.py 581): INFO 253.19154977798462
+[2026-10-16 12:28:56 root](main_bitmoe.py 207): INFO Calibrating router threshold (Layer-wise)...
+
+Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]
+Calibrating Threshold:  50%|█████     | 1/2 [00:01<00:01,  1.60s/it]
+Calibrating Threshold: 100%|██████████| 2/2 [00:03<00:00,  1.57s/it]
+Calibrating Threshold: 100%|██████████| 2/2 [00:03<00:00,  1.58s/it]
+get_wikitext2
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:29:10 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:29:10 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:29:10 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:29:10 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+ 50%|█████     | 1/2 [00:01<00:01,  1.56s/it]
+100%|██████████| 2/2 [00:03<00:00,  1.55s/it]
+100%|██████████| 2/2 [00:03<00:00,  1.55s/it]
+[2026-10-16 12:29:23 root](main_bitmoe.py 421): INFO wikitext2 : 30.92149543762207
+[2026-10-16 12:29:23 root](main_bitmoe.py 38): INFO Collecting QuantMoE statistics from calibration data...
+[2026-10-16 12:29:26 root](main_bitmoe.py 102): INFO ================================================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 103): INFO QuantMoE Statistics (collected over 2 samples):
+[2026-10-16 12:29:26 root](main_bitmoe.py 104): INFO Total QuantMoE modules: 224
+[2026-10-16 12:29:26 root](main_bitmoe.py 105): INFO Average Sparsity: 0.5617 (56.17%)
+[2026-10-16 12:29:26 root](main_bitmoe.py 106): INFO Average Effective Bits: 6.044
+[2026-10-16 12:29:26 root](main_bitmoe.py 107): INFO ================================================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 112): INFO Layer-wise Statistics:
+[2026-10-16 12:29:26 root](main_bitmoe.py 113): INFO Layer    Q        K        V        O        Down     Gate     Up       Mean Spar    Mean Bits
+[2026-10-16 12:29:26 root](main_bitmoe.py 114): INFO ----------------------------------------------------------------------------------------------------
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 0        45.8%    64.6%    35.4%    72.9%    96.9%    54.2%    66.7%    62.35%       4.259
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 1        40.6%    67.7%    28.1%    24.0%    56.2%    51.0%    64.6%    47.47%       5.152
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 2        27.1%    42.7%    32.3%    94.8%    94.8%    42.7%    61.5%    56.55%       4.607
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 3        42.7%    34.4%    40.6%    59.4%    97.9%    74.0%    44.8%    56.25%       4.625
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 4        37.5%    38.5%    36.5%    93.8%    94.8%    59.4%    57.3%    59.67%       4.420
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 5        31.2%    47.9%    37.5%    53.1%    87.5%    65.6%    65.6%    55.51%       4.670
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 6        47.9%    14.6%    43.8%    49.0%    88.5%    64.6%    52.1%    51.49%       4.911
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 7        31.2%    54.2%    46.9%    69.8%    93.8%    61.5%    70.8%    61.16%       4.330
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 8        37.5%    51.0%    51.0%    63.5%    80.2%    51.0%    42.7%    53.87%       4.768
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 9        54.2%    37.5%    75.0%    78.1%    80.2%    60.4%    61.5%    63.84%       4.170
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 10       37.5%    61.5%    21.9%    78.1%    75.0%    43.8%    77.1%    56.40%       4.616
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 11       55.2%    34.4%    53.1%    43.8%    71.9%    37.5%    69.8%    52.23%       4.866
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 12       58.3%    64.6%    33.3%    58.3%    78.1%    53.1%    61.5%    58.18%       4.509
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 13       26.0%    38.5%    50.0%    66.7%    65.6%    64.6%    43.8%    50.74%       4.955
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 14       59.4%    17.7%    49.0%    71.9%    65.6%    67.7%    46.9%    54.02%       4.759
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 15       40.6%    44.8%    41.7%    58.3%    66.7%    58.3%    50.0%    51.49%       4.911
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 16       39.6%    32.3%    52.1%    71.9%    71.9%    53.1%    44.8%    52.23%       4.866
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 17       35.4%    61.5%    17.7%    63.5%    62.5%    36.5%    60.4%    48.21%       5.107
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 18       54.2%    37.5%    76.0%    94.8%    79.2%    39.6%    47.9%    61.31%       4.321
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 19       68.8%    33.3%    49.0%    93.8%    68.8%    54.2%    57.3%    60.71%       4.357
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 20       42.7%    55.2%    69.8%    64.6%    67.7%    55.2%    68.8%    60.57%       4.366
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 21       31.2%    43.8%    57.3%    74.0%    58.3%    71.9%    68.8%    57.89%       4.527
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 22       66.7%    67.7%    43.8%    90.6%    69.8%    63.5%    64.6%    66.67%       4.000
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 23       68.8%    43.8%    52.1%    83.3%    67.7%    61.5%    58.3%    62.20%       4.268
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 24       43.8%    59.4%    51.0%    84.4%    66.7%    80.2%    64.6%    64.29%       4.143
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 25        6.2%    54.2%    53.1%    67.7%    66.7%    59.4%    54.2%    51.64%       4.902
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 26       39.6%    40.6%    54.2%    61.5%    64.6%    68.8%    59.4%    55.51%       4.670
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 27       58.3%    35.4%    44.8%    66.7%    61.5%    53.1%    43.8%    51.93%       4.884
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 28       44.8%    38.5%    61.5%    78.1%    40.6%    64.6%    37.5%    52.23%       4.866
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 29       40.6%    34.4%    59.4%    37.5%    58.3%    63.5%    61.5%    50.74%       4.955
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 30       38.5%    63.5%    63.5%    44.8%    64.6%    58.3%    64.6%    56.85%       4.589
+[2026-10-16 12:29:26 root](main_bitmoe.py 135): INFO 31       64.6%    34.4%    60.4%    62.5%    27.1%    61.5%    62.5%    53.27%       4.804
+[2026-10-16 12:29:26 root](main_bitmoe.py 148): INFO ==================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 149): INFO Summary by Module Type:
+[2026-10-16 12:29:26 root](main_bitmoe.py 150): INFO Module          Avg Sparsity    Avg Eff Bits Count
+[2026-10-16 12:29:26 root](main_bitmoe.py 151): INFO --------------------------------------------------
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO down_proj        71.55%          3.707        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO gate_proj        57.94%          4.523        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO k_proj           45.31%          5.281        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO o_proj           67.97%          3.922        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO q_proj           44.27%          5.344        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO up_proj          57.98%          4.521        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 156): INFO v_proj           48.18%          5.109        32
+[2026-10-16 12:29:26 root](main_bitmoe.py 157): INFO ================================================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 161): INFO ================================================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 162): INFO Token Bit Distribution per Layer and Module:
+[2026-10-16 12:29:26 root](main_bitmoe.py 163): INFO Layer    Module       Bit    Percentage
+[2026-10-16 12:29:26 root](main_bitmoe.py 164): INFO --------------------------------------------------
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        k_proj       2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        k_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        k_proj       6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        v_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        v_proj       6       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        v_proj       8       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        q_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        q_proj       4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        q_proj       6       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        o_proj       2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        o_proj       4       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        gate_proj    2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        gate_proj    4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        gate_proj    6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        down_proj    2       90.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        down_proj    4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        up_proj      2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        up_proj      4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 0        up_proj      6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        k_proj       2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        k_proj       4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        k_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        v_proj       4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        v_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        v_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        q_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        q_proj       6       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        q_proj       8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        o_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        o_proj       6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        o_proj       8       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        gate_proj    2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        gate_proj    4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        gate_proj    6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        gate_proj    8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        down_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        down_proj    4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        down_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        down_proj    8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        up_proj      2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        up_proj      4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        up_proj      6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 1        up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        k_proj       4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        k_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        k_proj       8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        v_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        v_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        v_proj       8       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        q_proj       6       71.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        q_proj       8       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        o_proj       2       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        o_proj       4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        gate_proj    4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        gate_proj    6       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        gate_proj    8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        down_proj    2       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        down_proj    4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        up_proj      2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        up_proj      4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        up_proj      6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 2        up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        k_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        k_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        k_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        v_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        v_proj       6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        v_proj       8       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        q_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        q_proj       4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        q_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        o_proj       2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        o_proj       4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        o_proj       6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        gate_proj    2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        gate_proj    4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        gate_proj    6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        down_proj    2       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        down_proj    4        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        up_proj      4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        up_proj      6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 3        up_proj      8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        k_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        k_proj       6       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        k_proj       8       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        v_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        v_proj       6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        v_proj       8       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        q_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        q_proj       6       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        o_proj       2       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        o_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        gate_proj    2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        gate_proj    4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        gate_proj    6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        down_proj    2       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        down_proj    4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        up_proj      4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 4        up_proj      6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        k_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        k_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        k_proj       8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        v_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        v_proj       6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        v_proj       8       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        q_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        q_proj       6       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        q_proj       8       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        o_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        o_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        o_proj       6       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        gate_proj    2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        gate_proj    4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        down_proj    2       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        down_proj    4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        up_proj      2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        up_proj      4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 5        up_proj      6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        k_proj       6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        k_proj       8       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        v_proj       4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        v_proj       6       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        q_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        q_proj       6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        q_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        o_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        o_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        gate_proj    2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        gate_proj    4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        gate_proj    6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        gate_proj    8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        down_proj    2       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        down_proj    4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        up_proj      4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        up_proj      6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 6        up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        k_proj       2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        k_proj       4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        k_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        v_proj       4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        v_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        q_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        q_proj       6       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        q_proj       8       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        o_proj       2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        o_proj       4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        o_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        gate_proj    2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        gate_proj    4       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        gate_proj    6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        down_proj    2       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        down_proj    4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        up_proj      2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        up_proj      4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        up_proj      6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 7        up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        k_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        k_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        k_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        v_proj       4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        v_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        v_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        q_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        q_proj       6       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        o_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        o_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        o_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        gate_proj    4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        gate_proj    6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        down_proj    2       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        down_proj    4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        down_proj    6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        up_proj      4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        up_proj      6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 8        up_proj      8       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        k_proj       4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        k_proj       6       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        k_proj       8       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        v_proj       2       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        v_proj       4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        v_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        q_proj       4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        q_proj       6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        q_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        o_proj       2       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        o_proj       4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        o_proj       6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        gate_proj    2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        gate_proj    4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        gate_proj    6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        down_proj    2       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        down_proj    4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        up_proj      2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        up_proj      4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 9        up_proj      6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       k_proj       2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       k_proj       4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       k_proj       6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       k_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       v_proj       4       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       v_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       v_proj       8       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       q_proj       4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       q_proj       6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       q_proj       8       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       o_proj       2       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       o_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       o_proj       6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       gate_proj    4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       gate_proj    6       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       gate_proj    8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       down_proj    2       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       down_proj    4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       down_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       down_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       up_proj      2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       up_proj      4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       up_proj      6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 10       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       k_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       k_proj       4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       k_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       k_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       v_proj       4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       v_proj       6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       q_proj       4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       q_proj       6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       q_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       o_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       o_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       o_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       o_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       gate_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       gate_proj    4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       gate_proj    6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       gate_proj    8       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       down_proj    2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       down_proj    4       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       up_proj      2       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       up_proj      4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 11       up_proj      6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       k_proj       2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       k_proj       4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       k_proj       6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       v_proj       6      100.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       q_proj       2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       q_proj       4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       q_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       o_proj       4       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       o_proj       6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       o_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       gate_proj    2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       gate_proj    4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       gate_proj    6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       down_proj    2       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       down_proj    4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       up_proj      2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       up_proj      4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 12       up_proj      6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       k_proj       4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       k_proj       6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       k_proj       8       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       v_proj       4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       v_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       v_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       q_proj       4        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       q_proj       6       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       q_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       o_proj       4      100.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       gate_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       gate_proj    4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       gate_proj    6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       down_proj    4       96.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       up_proj      4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       up_proj      6       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 13       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       k_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       k_proj       8       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       v_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       v_proj       6       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       q_proj       2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       q_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       q_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       o_proj       2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       o_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       o_proj       6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       gate_proj    2       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       gate_proj    4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       gate_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       gate_proj    8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       down_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       down_proj    4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       down_proj    6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       up_proj      2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       up_proj      4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       up_proj      6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 14       up_proj      8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       k_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       k_proj       4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       k_proj       6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       k_proj       8       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       v_proj       2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       v_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       v_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       v_proj       8       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       q_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       q_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       o_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       o_proj       4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       o_proj       6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       gate_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       gate_proj    4       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       gate_proj    6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       gate_proj    8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       down_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       down_proj    4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       up_proj      4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 15       up_proj      6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       k_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       k_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       k_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       v_proj       4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       v_proj       6       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       q_proj       4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       q_proj       6       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       q_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       o_proj       2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       o_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       gate_proj    4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       gate_proj    6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       down_proj    2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       down_proj    4       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       up_proj      2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       up_proj      4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 16       up_proj      6       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       k_proj       2       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       k_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       k_proj       6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       v_proj       4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       v_proj       6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       v_proj       8       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       q_proj       4        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       q_proj       6       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       o_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       o_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       o_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       gate_proj    4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       gate_proj    6       90.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       down_proj    4       87.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       down_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       up_proj      2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       up_proj      4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 17       up_proj      6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       k_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       k_proj       6       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       v_proj       2       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       v_proj       4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       v_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       q_proj       2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       q_proj       4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       q_proj       6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       q_proj       8       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       o_proj       2       87.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       o_proj       4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       o_proj       6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       gate_proj    4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       gate_proj    6       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       down_proj    2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       down_proj    4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       up_proj      4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       up_proj      6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 18       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       k_proj       4        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       k_proj       6       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       k_proj       8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       v_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       v_proj       6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       v_proj       8       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       q_proj       2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       q_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       q_proj       6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       o_proj       2       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       o_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       gate_proj    4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       gate_proj    6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       gate_proj    8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       down_proj    2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       down_proj    4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       down_proj    6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       up_proj      4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 19       up_proj      6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       k_proj       2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       k_proj       4       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       k_proj       6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       k_proj       8       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       v_proj       2       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       v_proj       4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       v_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       q_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       q_proj       6       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       q_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       o_proj       2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       o_proj       4       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       o_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       gate_proj    2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       gate_proj    4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       gate_proj    8       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       down_proj    2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       down_proj    4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       down_proj    6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       up_proj      2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       up_proj      4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 20       up_proj      6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       k_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       k_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       k_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       v_proj       2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       v_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       v_proj       6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       q_proj       4       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       q_proj       6       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       q_proj       8       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       o_proj       2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       o_proj       4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       o_proj       6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       gate_proj    2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       gate_proj    4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       down_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       down_proj    4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       down_proj    6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       up_proj      2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       up_proj      4       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 21       up_proj      6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       k_proj       2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       k_proj       4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       k_proj       6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       v_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       v_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       v_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       q_proj       2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       q_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       q_proj       6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       o_proj       2       71.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       o_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       gate_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       gate_proj    4       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       gate_proj    6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       down_proj    2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       down_proj    4       90.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       up_proj      2       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       up_proj      4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 22       up_proj      6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       k_proj       4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       k_proj       6       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       v_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       v_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       v_proj       6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       q_proj       2       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       q_proj       4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       q_proj       6       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       o_proj       2       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       o_proj       4       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       o_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       gate_proj    2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       gate_proj    4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       down_proj    2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       down_proj    4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       down_proj    6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       up_proj      2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       up_proj      4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       up_proj      6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 23       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       k_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       k_proj       4       71.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       k_proj       6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       v_proj       4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       v_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       q_proj       4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       q_proj       6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       q_proj       8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       o_proj       2       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       o_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       o_proj       6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       gate_proj    2       53.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       gate_proj    4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       gate_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       down_proj    2       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       down_proj    4       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       down_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       up_proj      2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       up_proj      4       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 24       up_proj      6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       k_proj       4       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       k_proj       6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       v_proj       2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       v_proj       4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       v_proj       6       50.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       q_proj       4        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       q_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       q_proj       8       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       o_proj       2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       o_proj       4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       o_proj       6       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       gate_proj    2       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       gate_proj    4       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       gate_proj    8        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       down_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       down_proj    4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       down_proj    6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       up_proj      2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       up_proj      4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       up_proj      6       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 25       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       k_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       k_proj       4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       k_proj       6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       k_proj       8       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       v_proj       2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       v_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       v_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       q_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       q_proj       6       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       q_proj       8       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       o_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       o_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       gate_proj    2       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       gate_proj    4       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       gate_proj    6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       down_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       down_proj    4       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       down_proj    6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       up_proj      2        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       up_proj      4       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 26       up_proj      6       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       k_proj       4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       k_proj       6       87.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       k_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       v_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       v_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       q_proj       2       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       q_proj       4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       q_proj       6       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       o_proj       4      100.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       gate_proj    4       56.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       gate_proj    6       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       gate_proj    8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       down_proj    4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       down_proj    6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       up_proj      4       31.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 27       up_proj      6       68.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       k_proj       4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       k_proj       6       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       v_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       v_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       q_proj       4       34.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       q_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       o_proj       2       43.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       o_proj       4       46.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       o_proj       6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       gate_proj    2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       gate_proj    4       87.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       gate_proj    6        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       down_proj    4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       down_proj    6       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       up_proj      4       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       up_proj      6       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 28       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       k_proj       4        9.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       k_proj       6       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       v_proj       2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       v_proj       4       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       v_proj       6       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       q_proj       4       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       q_proj       6       65.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       q_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       o_proj       4       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       o_proj       6       87.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       gate_proj    2        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       gate_proj    4       78.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       gate_proj    6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       down_proj    4       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       down_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       up_proj      4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 29       up_proj      6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       k_proj       2       28.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       k_proj       4       40.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       k_proj       6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       k_proj       8        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       v_proj       4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       v_proj       6        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       q_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       q_proj       4       21.88%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       q_proj       6       62.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       q_proj       8       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       o_proj       4       37.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       o_proj       6       59.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       o_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       gate_proj    4       75.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       gate_proj    6       25.00%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       down_proj    4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       down_proj    6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       up_proj      4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 30       up_proj      6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       k_proj       4        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       k_proj       6       90.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       k_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       v_proj       4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       v_proj       6       12.50%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       v_proj       8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       q_proj       4       93.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       q_proj       6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       o_proj       2        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       o_proj       4       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       o_proj       6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       gate_proj    4       84.38%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       gate_proj    6       15.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       down_proj    6       81.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       down_proj    8       18.75%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       up_proj      4       90.62%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       up_proj      6        6.25%
+[2026-10-16 12:29:26 root](main_bitmoe.py 176): INFO 31       up_proj      8        3.12%
+[2026-10-16 12:29:26 root](main_bitmoe.py 177): INFO ================================================================================
+[2026-10-16 12:29:26 root](main_bitmoe.py 189): INFO Aggregated Token Bit Distribution:
+[2026-10-16 12:29:26 root](main_bitmoe.py 194): INFO Bits: 2, Tokens: 3218.75, Percentage: 14.37%
+[2026-10-16 12:29:26 root](main_bitmoe.py 194): INFO Bits: 4, Tokens: 10334.375, Percentage: 46.14%
+[2026-10-16 12:29:26 root](main_bitmoe.py 194): INFO Bits: 6, Tokens: 7421.875, Percentage: 33.13%
+[2026-10-16 12:29:26 root](main_bitmoe.py 194): INFO Bits: 8, Tokens: 1425.0, Percentage: 6.36%
+[2026-10-16 12:29:26 root](main_bitmoe.py 195): INFO ================================================================================

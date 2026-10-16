@@ -1,6 +1,6 @@
 # MoBiQuant
 
-Selected BitMoE training and evaluation code from BitMoEV2 branch `buildq2`, commit `7d493d8ffe7a4367b8f99375a9599547dab5ce99`. Original source files are preserved byte for byte; see `MIGRATION_MANIFEST.json`.
+Selected BitMoE training and evaluation code from BitMoEV2 branch `buildq2`, commit `7d493d8ffe7a4367b8f99375a9599547dab5ce99`. The original checkout is untouched. `MIGRATION_MANIFEST.json` records initial import hashes; targeted fixes made only in this destination repository are described in `validation/FEATURE_AUDIT.md`.
 
 ## Architecture
 
@@ -19,9 +19,25 @@ conda activate omniquant
 python validation/gpu_smoke.py
 ```
 
-For a new environment, install a suitable CUDA PyTorch build and the project dependencies from `pyproject.toml`; also install `termcolor`, which the logger imports. Pin Transformers to 4.56.1 for the validated API. The project metadata's broad minimum versions are inherited and are not a reproducible lockfile. AutoGPTQ is optional for this floating-point simulation workflow; its absence prints a message. Real packed quantization has not been validated.
+For a new environment, install a suitable CUDA PyTorch build and the project dependencies from `pyproject.toml`; `termcolor` and the validated Transformers 4.56.1 pin are now included in project dependencies. Use `pip install -r requirements-validated.lock` for the tested direct package versions, selecting a suitable PyTorch CUDA build for the machine. Transitive dependencies are resolved by pip; this is not a full environment lock. AutoGPTQ is optional for this floating-point simulation workflow; its absence prints a message. Real packed quantization has not been validated.
 
-## Train and evaluate
+## Recommended four-model workflow
+
+Use `scripts/bitmoe/run.py` for the audited workflow. Presets are `llama2-7b`, `llama3-1b` (Llama-3.2-1B), `llama3-3b` (Llama-3.2-3B base), and `llama3-8b` (Llama-3-8B). Each trains with `--target_bit 3`, all Attention and MLP projections in MoE mode, and saves to `log/<preset>-target3` by default. This is a training objective, not a guarantee that learned routing reaches exactly 3 bits.
+
+```bash
+conda activate omniquant
+python scripts/bitmoe/run.py train llama2-7b --gpu 0
+python scripts/bitmoe/run.py sweep llama2-7b --gpu 0
+```
+
+Shell equivalents are `bash scripts/bitmoe/train_target3.sh llama2-7b --gpu 0` and `bash scripts/bitmoe/sweep_eval.sh llama2-7b --gpu 0`. Replace `llama2-7b` with any other preset for the same workflow. `--model`, `--checkpoint`, `--output`, `--epochs`, `--nsamples`, `--seqlen` and `--limit` are configurable. Use `--dry-run` to inspect commands. Sweep defaults to 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8 bits; use `--bits 2 3 4 5 6 7 8` to choose points.
+
+Results are written incrementally to `results/<preset>/sweep/bits-performance.csv` with `target_bit_eval,actual_bits,wikitext2_ppl,moe_modules,status,metrics_file,log_file`. Each point has its own `metrics.json` and `eval.log`. Runs fail on subprocess errors or missing/invalid metrics, preserve completed rows, and refuse to overwrite nonempty output directories. Metrics come from JSON, not grep of a shared log. Actual bits are the mean over calibration samples and MoE projections (not a parameter-weighted storage bit rate). The 2-bit endpoint disables residual experts and records exactly 2 bits.
+
+The shell scripts below are retained historical experiments, not the recommended four-model workflow. In particular the legacy 1B script named w3 actually targets about 4.1 bits, and old sweeps have mismatched checkpoint paths and fragile log extraction.
+
+## Low-level train and evaluate
 
 Run from the repository root. Replace model, GPU and output paths as needed. Original model weights and Hugging Face dataset access/cache are required for real model runs.
 
@@ -33,7 +49,7 @@ CUDA_VISIBLE_DEVICES=0 python main_bitmoe.py \
   --slice_bits_list 2 2 2 2 --stage_weight 1.0 1.33 \
   --epochs 20 --batch_size 1 --lwc --lwc_lr 1e-3 \
   --bitmoe_lr 8e-5 --reg_weight 8e-5 \
-  --target_activation_ratio 0.15 --eval_ppl
+  --target_bit 3 --eval_ppl
 ```
 
 Restore trained parameters and evaluate at a target average bit rate:
@@ -64,7 +80,7 @@ Only scripts invoking `main_bitmoe.py` are retained. They are historical configu
 - W&B imports are commented out in the active entry/calibration files. Leave `--wandb` disabled. W&B sweep launchers are excluded.
 - Router threshold calibration moves the whole model to one GPU before evaluation, even with `--multigpu`.
 - Residual experts use floating-point matrix multiplications with masked inputs. This code does not establish packed low-bit memory savings or sparse compute speedups.
-- The tested smoke model is synthetic and small. No pretrained 1B/3B/8B PPL or accuracy result is claimed.
+- The tested smoke model is synthetic and small. The feature audit runs reduced real-weight WikiText checks separately; these do not establish production training convergence or full-test-set PPL.
 
 ## Migration and validation
 

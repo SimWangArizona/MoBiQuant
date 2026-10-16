@@ -24,6 +24,8 @@ net_choices = [
 ]
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--metrics_file", type=str, default=None, help="Write machine-readable evaluation metrics as JSON")
+parser.add_argument("--seqlen", type=int, default=2048, help="Calibration and PPL sequence length")
 parser.add_argument("--model", type=str, help="model name of model path")
 parser.add_argument("--cache_dir", default="./cache", type=str, help="cache dir of dataset, leading to faster debug")
 parser.add_argument("--output_dir", default="../log/", type=str, help="direction of logging file")

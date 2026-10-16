@@ -13,7 +13,9 @@ GPU: NVIDIA RTX A6000 torch: 2.8.0+cu128
 auto_gptq is required for real quantization
 LlamaModel:  default
 Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
-Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00, 73.20it/s]
+
+Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]
+Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00, 73.77it/s]
 Target Ratio: 0.3333
 Layer 0: threshold = 0.0339
 Layer-wise thresholds calibrated.
@@ -22,7 +24,9 @@ Starting ...
 Calibrating router threshold (Layer-wise)...
 LlamaModel:  default
 Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
-Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00, 74.32it/s]
+
+Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]
+Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00, 74.41it/s]
 Target Ratio: 0.3333
 Layer 0: threshold = 0.0339
 Layer-wise thresholds calibrated.

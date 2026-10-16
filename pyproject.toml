@@ -7,7 +7,7 @@ name = "omniquant"
 version = "0.1.0"
 description = "An efficient, accurate, and omnibearing quantization algorithm for LLMs, encompassing both weight-only quantization (W4A16/W3A16/W2A16) and weight-activation quantization (W8A8, W6A6, W4A4)."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
@@ -20,11 +20,11 @@ dependencies = [
     "scikit-learn>=0.24.1","sqlitedict",
     "tqdm-multiprocess","zstandard",
     "accelerate", "sentencepiece", "tokenizers>=0.12.1",
-    "torch>=2.0.0", "torchvision", 
-    "transformers>=4.31.0", 
+    "torch>=2.0.0", "torchvision",
+    "transformers==4.56.1",
     "texttable",
     "toml", "attributedict",
-    "protobuf"
+    "protobuf", "termcolor"
 ]
 
 [tool.setuptools.packages.find]

@@ -1,0 +1,16 @@
+/home/dwang/anaconda3/envs/omniquant/lib/python3.10/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/dwang/anaconda3/envs/omniquant/lib/python3.10/site-packages/torch/cuda/__init__.py:829: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+auto_gptq is required for real quantization
+LlamaModel:  default
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+100%|██████████| 1/1 [00:00<00:00, 37.49it/s]
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|██████████| 2/2 [00:00<00:00, 172.71it/s]
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+100%|██████████| 4/4 [00:00<00:00, 110.68it/s]
+PASS uniform-logit PPL normalization with 1, 2 and all evaluation sequences

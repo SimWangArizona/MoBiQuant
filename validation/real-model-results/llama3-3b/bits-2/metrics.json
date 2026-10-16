@@ -1,0 +1,10 @@
+{
+  "wikitext2": 21413.44140625,
+  "actual_bits": 2.0,
+  "moe_modules": 196,
+  "bits_measurement": "MSB-only; residual experts disabled",
+  "model": "/mnt/fast7T/models/Llama-3.2-3B",
+  "target_bit_eval": 2.0,
+  "target_bit_train": null,
+  "seqlen": 32
+}

@@ -1,1 +1,1 @@
-PASS: 180 source hashes; 118 Python files parsed; 46 shell scripts passed bash -n.
+PASS: 123 Python syntax checks; 48 bash syntax checks; dependency metadata satisfied.

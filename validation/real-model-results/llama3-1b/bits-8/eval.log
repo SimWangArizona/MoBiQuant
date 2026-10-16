@@ -1,0 +1,252 @@
+/home/dwang/anaconda3/envs/omniquant/lib/python3.10/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+auto_gptq is required for real quantization
+['/tmp/mobiquant-migration/main_bitmoe.py', '--model', '/mnt/fast7T/models/Llama-3.2-1B', '--wbits', '2', '--abits', '16', '--group_size', '128', '--lwc', '--slice_bits_list', '2', '2', '2', '2', '--nsamples', '2', '--seqlen', '32', '--limit', '2', '--eval_ppl', '--epochs', '0', '--resume', '/tmp/mobiquant-audit-runs/llama3-1b/checkpoint', '--target_bit_eval', '8.0', '--output_dir', '/tmp/mobiquant-audit-runs/llama3-1b/sweep/bits-8', '--metrics_file', '/tmp/mobiquant-audit-runs/llama3-1b/sweep/bits-8/metrics.json']
+[2026-10-16 12:27:03 root](main_bitmoe.py 485): INFO Namespace(metrics_file='/tmp/mobiquant-audit-runs/llama3-1b/sweep/bits-8/metrics.json', seqlen=32, model='/mnt/fast7T/models/Llama-3.2-1B', cache_dir='./cache', output_dir='/tmp/mobiquant-audit-runs/llama3-1b/sweep/bits-8', save_dir=None, resume='/tmp/mobiquant-audit-runs/llama3-1b/checkpoint', real_quant=False, calib_dataset='wikitext2', nsamples=2, batch_size=1, seed=2, tasks='', eval_ppl=True, num_fewshot=0, wbits=2, attnbits=4, abits=16, slice_bits_list=[2, 2, 2, 2], stage_weight=[1.0, 1.0], slice_bits_eval=0, bitmoe_lr=1e-05, group_size=128, alpha=0.5, let_lr=0.005, lwc_lr=0.001, wd=0, epochs=0, let=False, lwc=True, aug_loss=True, symmetric=False, disable_zero_point=False, a_dynamic_method='per_token', w_dynamic_method='per_channel', limit=2, multigpu=False, deactive_amp=False, attn_implementation='eager', net=None, act_scales=None, act_shifts=None, slicing=False, target_activation_ratio=None, target_bit=None, target_activation_ratio_eval=None, target_bit_eval=8.0, reg_weight=1e-05, onlymlp=False, wandb=False, wandb_project='test', wandb_name='test_run', stage_weight_1=None)
+[2026-10-16 12:27:03 root](main_bitmoe.py 486): INFO attn block bits: 4
+`torch_dtype` is deprecated! Use `dtype` instead!
+LlamaModel:  llama3
+vocab size:  128000
+[2026-10-16 12:27:04 root](main_bitmoe.py 551): INFO === start quantization ===
+get_wikitext2
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:27:04 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:27:04 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:27:04 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:27:04 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Token indices sequence length is longer than the specified maximum sequence length for this model (2436214 > 131072). Running this sequence through the model will result in indexing errors
+[2026-10-16 12:27:15 root](bitmoequant_llama3.py 53): INFO Starting ...
+[2026-10-16 12:27:16 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 0 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:16 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 1 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:17 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 2 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:17 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 3 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:18 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 4 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:19 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 5 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:19 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 6 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:20 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 7 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:20 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 8 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:21 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 9 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:21 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 10 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:22 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 11 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:22 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 12 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:23 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 13 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:24 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 14 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:24 root](bitmoequant_llama3.py 238): INFO === Start quantize layer 15 ===
+Using QuantLlamaAttentionMoE/QuantLlamaMoE!!
+[2026-10-16 12:27:25 root](main_bitmoe.py 580): INFO 21.297173261642456
+[2026-10-16 12:27:25 root](main_bitmoe.py 206): INFO Calibrating router threshold (Layer-wise)...
+
+Calibrating Threshold:   0%|          | 0/2 [00:00<?, ?it/s]
+Calibrating Threshold:  50%|█████     | 1/2 [00:00<00:00,  2.41it/s]
+Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00,  3.18it/s]
+Calibrating Threshold: 100%|██████████| 2/2 [00:00<00:00,  3.04it/s]
+[2026-10-16 12:27:27 root](main_bitmoe.py 268): INFO Target Ratio: 1.0000
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 0: threshold = -0.4148
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 1: threshold = -0.3611
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 2: threshold = -0.6147
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 3: threshold = -0.5898
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 4: threshold = -0.5293
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 5: threshold = -0.7119
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 6: threshold = -0.5767
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 7: threshold = -0.6074
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 8: threshold = -0.5718
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 9: threshold = -0.5249
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 10: threshold = -0.7202
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 11: threshold = -0.7104
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 12: threshold = -0.7754
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 13: threshold = -0.9673
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 14: threshold = -0.6646
+[2026-10-16 12:27:27 root](main_bitmoe.py 284): INFO Layer 15: threshold = -0.7563
+[2026-10-16 12:27:27 root](main_bitmoe.py 286): INFO Layer-wise thresholds calibrated.
+get_wikitext2
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:27:27 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:27:27 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+[2026-10-16 12:27:27 datasets.load](load.py 817): WARNING Using the latest cached version of the dataset since wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+[2026-10-16 12:27:27 datasets.packaged_modules.cache.cache](cache.py 94): WARNING Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/dwang/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Sun Sep  7 11:54:24 2025).
+Token indices sequence length is longer than the specified maximum sequence length for this model (2436214 > 131072). Running this sequence through the model will result in indexing errors
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+ 50%|█████     | 1/2 [00:00<00:00,  3.89it/s]
+100%|██████████| 2/2 [00:00<00:00,  4.12it/s]
+100%|██████████| 2/2 [00:00<00:00,  4.08it/s]
+[2026-10-16 12:27:38 root](main_bitmoe.py 420): INFO wikitext2 : 38.79401779174805
+[2026-10-16 12:27:38 root](main_bitmoe.py 37): INFO Collecting QuantMoE statistics from calibration data...
+[2026-10-16 12:27:39 root](main_bitmoe.py 101): INFO ================================================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 102): INFO QuantMoE Statistics (collected over 2 samples):
+[2026-10-16 12:27:39 root](main_bitmoe.py 103): INFO Total QuantMoE modules: 112
+[2026-10-16 12:27:39 root](main_bitmoe.py 104): INFO Average Sparsity: 0.0000 (0.00%)
+[2026-10-16 12:27:39 root](main_bitmoe.py 105): INFO Average Effective Bits: 8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 106): INFO ================================================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 111): INFO Layer-wise Statistics:
+[2026-10-16 12:27:39 root](main_bitmoe.py 112): INFO Layer    Q        K        V        O        Down     Gate     Up       Mean Spar    Mean Bits
+[2026-10-16 12:27:39 root](main_bitmoe.py 113): INFO ----------------------------------------------------------------------------------------------------
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 0         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 1         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 2         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 3         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 4         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 5         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 6         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 7         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 8         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 9         0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 10        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 11        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 12        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 13        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 14        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 134): INFO 15        0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.0%     0.00%       8.000
+[2026-10-16 12:27:39 root](main_bitmoe.py 147): INFO ==================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 148): INFO Summary by Module Type:
+[2026-10-16 12:27:39 root](main_bitmoe.py 149): INFO Module          Avg Sparsity    Avg Eff Bits Count
+[2026-10-16 12:27:39 root](main_bitmoe.py 150): INFO --------------------------------------------------
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO down_proj         0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO gate_proj         0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO k_proj            0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO o_proj            0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO q_proj            0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO up_proj           0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 155): INFO v_proj            0.00%          8.000        16
+[2026-10-16 12:27:39 root](main_bitmoe.py 156): INFO ================================================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 160): INFO ================================================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 161): INFO Token Bit Distribution per Layer and Module:
+[2026-10-16 12:27:39 root](main_bitmoe.py 162): INFO Layer    Module       Bit    Percentage
+[2026-10-16 12:27:39 root](main_bitmoe.py 163): INFO --------------------------------------------------
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 0        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 1        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 2        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 3        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 4        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 5        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 6        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 7        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 8        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 9        up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 10       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 11       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 12       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 13       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 14       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       k_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       v_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       q_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       o_proj       8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       gate_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       down_proj    8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 175): INFO 15       up_proj      8      100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 176): INFO ================================================================================
+[2026-10-16 12:27:39 root](main_bitmoe.py 188): INFO Aggregated Token Bit Distribution:
+[2026-10-16 12:27:39 root](main_bitmoe.py 193): INFO Bits: 8, Tokens: 11200.0, Percentage: 100.00%
+[2026-10-16 12:27:39 root](main_bitmoe.py 194): INFO ================================================================================

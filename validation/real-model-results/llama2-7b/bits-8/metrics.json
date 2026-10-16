@@ -1,0 +1,10 @@
+{
+  "wikitext2": 20.848838806152344,
+  "actual_bits": 8.0,
+  "moe_modules": 224,
+  "bits_measurement": "calibration mean over samples and MoE projections",
+  "model": "/mnt/fast7T/models/Llama-2-7b-hf",
+  "target_bit_eval": 8.0,
+  "target_bit_train": null,
+  "seqlen": 32
+}

@@ -1,0 +1,4 @@
+target_bit_eval,actual_bits,wikitext2_ppl,moe_modules,status,metrics_file,log_file
+2.0,2.0,46630.02734375,112,ok,bits-2/metrics.json,bits-2/eval.log
+3.0,2.8602120535714284,2845.884033203125,112,ok,bits-3/metrics.json,bits-3/eval.log
+8.0,8.0,38.79401779174805,112,ok,bits-8/metrics.json,bits-8/eval.log
