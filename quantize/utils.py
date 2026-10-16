@@ -12,14 +12,14 @@ def let_parameters(model, use_shift=True):
     for n, m in model.named_parameters():
         if n.find(template) > -1:
             params.append(m)
-    return iter(params)  
+    return iter(params)
 
 def lwc_parameters(model):
     params = []
     for n, m in model.named_parameters():
         if n.find('bound_factor') > -1:
             params.append(m)
-    return iter(params)  
+    return iter(params)
 
 def bitmoe_parameters(model):
     params = []
@@ -28,13 +28,6 @@ def bitmoe_parameters(model):
             params.append(m)
     return iter(params)
 
-def get_omni_parameters(model, use_shift=True):
-    params = []
-    template = "smooth" if use_shift else "smooth_scale"
-    for n, m in model.named_parameters():
-        if n.find('bound_factor') > -1 or n.find(template) > -1:
-            params.append(m)
-    return iter(params)  
 
 def get_bitmoe_parameters(model, use_shift=True):
     params = []
@@ -45,25 +38,8 @@ def get_bitmoe_parameters(model, use_shift=True):
             # print(f", smooth: {n}" if n.find(template) > -1 else "", end="")
             # print(f", router: {n}" if n.find('router') > -1 else "")
             params.append(m)
-    return iter(params)  
+    return iter(params)
 
-def find_grad_norm(model, use_shift=True):
-    grad_info = []
-    template = "smooth" if use_shift else "smooth_scale"
-
-    for n, m in model.named_parameters():
-        if (
-            'bound_factor' in n 
-            or template in n 
-            or 'router' in n
-        ):
-            if m.grad is not None:
-                g = m.grad.norm().item()
-                grad_info.append((n, g))
-            else:
-                grad_info.append((n, None))
-
-    return grad_info
 
 def omni_state_dict(model, destination=None, prefix='', keep_vars=False):
     if destination is None:
@@ -84,17 +60,17 @@ class TruncateFunction(torch.autograd.Function):
         truncated_tensor = input.clone()
         truncated_tensor[truncated_tensor.abs() < threshold] = truncated_tensor[truncated_tensor.abs() < threshold].sign() * threshold
         return truncated_tensor
-        
+
 
     @staticmethod
     def backward(ctx, grad_output):
         grad_input = grad_output.clone()
         return grad_input, None
 
-     
+
 def truncate_number(number, threshold=1e-2):
     # avoid overflow with AMP training
-    return TruncateFunction.apply(number, threshold)     
+    return TruncateFunction.apply(number, threshold)
 
 def smooth_and_quant_temporary(model, args, isllama, buildq_mode=False, stage_cfg=None):
     if args.let:
@@ -222,15 +198,6 @@ def set_quant_state(self, weight_quant: bool = False, act_quant: bool = False):
             m.set_quant_state(weight_quant, act_quant)
 
 
-def set_inference_mode(self, bitmoe_infer: bool = False, soft_infer: bool = False,hard_infer: bool = False, buildq_infer: bool = False):
-    # setting weight quantization here does not affect actual forward pass
-    self.bitmoe_infer = bitmoe_infer
-    self.soft_infer = soft_infer
-    self.hard_infer = hard_infer # soft hard is for bitmoe itself
-    self.buildq_infer = buildq_infer
-    for m in self.modules():
-        if isinstance(m, QuantMoE):
-            m.set_inference_mode(bitmoe_infer, buildq_infer)
 
 def compute_stage_config(args):
     """Generate stage configurations from slice_bit_list."""
@@ -273,115 +240,3 @@ def router_state_dict(model, destination=None, prefix='', keep_vars=False):
         if 'router' in name:
             destination[prefix + name] = param if keep_vars else param.detach()
     return destination
-
-def collect_router_stats(qlayer, quant_inps, attention_mask, position_ids,
-                         position_embeddings, args, epoch, layer_idx):
-    """
-    Collect comprehensive router statistics for current layer and epoch.
-
-    Args:
-        qlayer: Quantized decoder layer containing QuantMoE modules
-        quant_inps: Input tensors for the layer
-        attention_mask: Attention mask for forward pass
-        position_ids: Position IDs for forward pass
-        position_embeddings: Position embeddings for forward pass
-        args: Training arguments containing slice_bits_list, nsamples, batch_size
-        epoch: Current training epoch
-        layer_idx: Current layer index
-
-    Returns:
-        Dictionary containing:
-            - summary: Layer-level aggregate statistics
-            - modules: Per-module (gate_proj, up_proj, down_proj) statistics
-            - token_sample: Sample of token-level routing decisions
-    """
-    stats = {
-        'summary': {},
-        'modules': {},
-        'token_sample': {}
-    }
-
-    # Determine current training step for temperature calculation
-    current_step = epoch * (args.nsamples // args.batch_size)
-
-    # Forward pass to populate router.scores and router.scalar
-    # Use a sample of tokens to avoid excessive computation
-    with torch.no_grad():
-        with torch.amp.autocast(device_type="cuda"):
-            sample_size = min(1000, args.nsamples)
-            for j in range(sample_size):
-                _ = qlayer(quant_inps[j].unsqueeze(0),
-                        attention_mask=attention_mask,
-                        position_ids=position_ids,
-                        position_embeddings=position_embeddings,
-                        step=current_step)
-
-    # Collect from each QuantMoE module
-    all_scores = []
-    all_scalars = []
-    all_sparsity = []
-    module_names = []
-
-    for name, module in qlayer.named_modules():
-        if isinstance(module, QuantMoE):
-            if hasattr(module.Mask_Router, 'scores') and hasattr(module.Mask_Router, 'scalar'):
-                scores = module.Mask_Router.scores.detach().cpu()
-                scalars = module.Mask_Router.scalar.detach().cpu()
-
-                # Compute sparsity
-                sparsity = module.get_sparsity()
-                all_sparsity.append(sparsity)
-
-                # Per-module stats
-                stats['modules'][name] = {
-                    'scores_mean': scores.mean(dim=0).tolist(),
-                    'scores_std': scores.std(dim=0).tolist(),
-                    'scalars_mean': scalars.mean(dim=0).tolist(),
-                    'scalars_std': scalars.std(dim=0).tolist(),
-                    'expert_activation_rates': (scalars > 0.5).float().mean(dim=0).tolist(),
-                    'sparsity': sparsity
-                }
-
-                all_scores.append(scores)
-                all_scalars.append(scalars)
-                module_names.append(name)
-
-    # Aggregate summary stats across all modules
-    if all_scalars:
-        combined_scalars = torch.cat(all_scalars, dim=0)
-        base_bits = args.slice_bits_list[0]
-        expert_bits = torch.tensor(args.slice_bits_list[1:], dtype=combined_scalars.dtype)
-        effective_bits = base_bits + (combined_scalars * expert_bits).sum(dim=1)
-
-        stats['summary'] = {
-            'avg_effective_bits': effective_bits.mean().item(),
-            'std_effective_bits': effective_bits.std().item(),
-            'min_effective_bits': effective_bits.min().item(),
-            'max_effective_bits': effective_bits.max().item(),
-            'expert_activation_rates': combined_scalars.mean(dim=0).tolist(),
-            'temperature': _compute_temperature(current_step, args.global_steps),
-            'avg_sparsity': sum(all_sparsity) / len(all_sparsity) if all_sparsity else 0.0
-        }
-
-        # Save token sample for detailed analysis (from first module only to save space)
-        sample_idx = 0
-        stats['token_sample'] = {
-            'scores': all_scores[sample_idx][:1000].clone(),
-            'scalars': all_scalars[sample_idx][:1000].clone(),
-            'effective_bits': effective_bits[:1000].clone()
-        }
-
-    return stats
-
-def _compute_temperature(step, global_steps):
-    """Compute temperature value for router annealing (matches GateMask.step())."""
-    max_temperature = 100
-
-    if step < global_steps:
-        temperature = min(max_temperature,
-                         1.0 / (1 - torch.log(torch.tensor(max(1, step), dtype=torch.float32)) /
-                                torch.log(torch.tensor(global_steps, dtype=torch.float32)) + 1e-6))
-    else:
-        temperature = max_temperature
-
-    return temperature.item() if isinstance(temperature, torch.Tensor) else temperature

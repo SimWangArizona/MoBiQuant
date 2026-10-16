@@ -3,32 +3,28 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "omniquant"
+name = "mobiquant"
 version = "0.1.0"
-description = "An efficient, accurate, and omnibearing quantization algorithm for LLMs, encompassing both weight-only quantization (W4A16/W3A16/W2A16) and weight-activation quantization (W8A8, W6A6, W4A4)."
+description = "Mixed-bit routed quantization and calibration for LLaMA models."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-    "datasets>=2.0.0","einops","jsonlines","numexpr",
-    "openai>=0.6.4","omegaconf>=2.2","peft>=0.2.0",
-    "pybind11>=2.6.2","pycountry","pytablewriter",
-    "rouge-score>=0.0.4","sacrebleu==1.5.0",
-    "scikit-learn>=0.24.1","sqlitedict",
-    "tqdm-multiprocess","zstandard",
-    "accelerate", "sentencepiece", "tokenizers>=0.12.1",
-    "torch>=2.0.0", "torchvision",
-    "transformers==4.56.1",
-    "texttable",
-    "toml", "attributedict",
-    "protobuf", "termcolor"
+    "torch==2.8.0", "transformers==4.56.1", "accelerate==1.10.1",
+    "datasets==4.0.0", "numpy==2.2.6", "tqdm==4.67.3",
+    "sentencepiece==0.2.1", "tokenizers==0.22.0", "protobuf==6.32.0",
+    "termcolor==3.1.0", "huggingface-hub==0.34.4", "hf-xet==1.3.1",
+    "safetensors==0.7.0",
 ]
 
-[tool.setuptools.packages.find]
-exclude = ["results*", "scripts*", "examples*"]
+[tool.setuptools]
+py-modules = ["datautils", "main_bitmoe", "parser", "utils"]
 
-[tool.wheel]
-exclude = ["results*", "scripts*", "examples*"]
+[tool.setuptools.packages.find]
+include = ["models*", "quantize*", "workflows*"]
+
+[tool.setuptools.package-data]
+workflows = ["training_recipes.json"]

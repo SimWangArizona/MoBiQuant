@@ -20,3 +20,19 @@ pre_quantized_models/
 temp.sh
 router_figures/
 wandb
+# Downloaded weights, generated runs and local validation output.
+pretrained_models/
+results/
+*.pth
+*.safetensors
+*.log
+*.log.*
+# Keep the public installation entrypoint despite the historical *.txt rule.
+!requirements.txt
+
+# Local agent settings and credentials.
+.codex/
+.agents/
+.aws/
+.env
+.env.*

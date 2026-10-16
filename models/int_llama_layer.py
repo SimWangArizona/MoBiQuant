@@ -1,18 +1,15 @@
 import torch
 from torch import nn
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple
 from quantize.int_linear import QuantLinear
 from quantize.int_moe import QuantMoE
 from quantize.int_matmul import QuantMatMul
-import torch.nn.functional as F
 from quantize.omni_norm import OmniLlamaRMSNorm
 from collections import OrderedDict
 import math
-from transformers.models.llama.modeling_llama import LlamaRotaryEmbedding,apply_rotary_pos_emb,LlamaRMSNorm,repeat_kv, LlamaAttention
+from transformers.models.llama.modeling_llama import LlamaRotaryEmbedding, apply_rotary_pos_emb, repeat_kv
 from transformers.models.llama.configuration_llama import LlamaConfig
 from transformers.activations import ACT2FN
-import pdb
-import copy
 from models.transformation import *
 
 
@@ -80,7 +77,7 @@ class QuantLlamaMoE(nn.Module):
 class QuantLlamaAttention(nn.Module):
     """Multi-headed attention from 'Attention Is All You Need' paper"""
 
-    def __init__(self, 
+    def __init__(self,
                  org_module: nn.Module,
                  config: LlamaConfig,
                  args=None):
@@ -171,7 +168,7 @@ class QuantLlamaAttention(nn.Module):
         # repeat k/v heads if n_kv_heads < n_heads
         key_states = repeat_kv(key_states, self.num_key_value_groups)
         value_states = repeat_kv(value_states, self.num_key_value_groups)
-        
+
         query_states = self.qkt_matmul.quant_x1(query_states)
         key_states = self.qkt_matmul.quant_x2(key_states)
         attn_weights = self.qkt_matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)
@@ -211,7 +208,7 @@ class QuantLlamaAttention(nn.Module):
             attn_weights = None
 
         return attn_output, attn_weights, past_key_value
-    
+
     def set_quant_state(self, weight_quant: bool = False, act_quant: bool = False):
         # setting weight quantization here does not affect actual forward pass
         self.use_weight_quant = weight_quant
@@ -219,7 +216,7 @@ class QuantLlamaAttention(nn.Module):
         for m in self.modules():
             if isinstance(m, (QuantLinear, QuantMatMul)):
                 m.set_quant_state(weight_quant, act_quant)
-                
+
 
 class QuantLlamaAttentionMoE(nn.Module):
     """Multi-headed attention with MoE quantization from 'Attention Is All You Need' paper"""
@@ -501,7 +498,7 @@ class QuantLlamaDecoderLayer(nn.Module):
         if len(outputs) == 1:
             return outputs[0]
 
-        return outputs        
+        return outputs
 
     def set_quant_state(self, weight_quant: bool = False, act_quant: bool = False):
         # setting weight quantization here does not affect actual forward pass
@@ -512,7 +509,7 @@ class QuantLlamaDecoderLayer(nn.Module):
             if isinstance(m, (QuantLinear, QuantMatMul, QuantMoE)):
                 names.append(name)
                 m.set_quant_state(weight_quant, act_quant)
-      
+
     def smooth_and_quant_temporary(self):
         if self.let:
             with torch.no_grad():
@@ -574,14 +571,14 @@ class QuantLlamaDecoderLayer(nn.Module):
         for n, m in self.named_parameters():
             if n.find(template) > -1:
                 params.append(m)
-        return iter(params)  
+        return iter(params)
 
     def lwc_parameters(self):
         params = []
         for n, m in self.named_parameters():
             if n.find('bound_factor') > -1:
                 params.append(m)
-        return iter(params)  
+        return iter(params)
 
     def omni_parameters(self, use_shift=True):
         params = []
@@ -589,8 +586,8 @@ class QuantLlamaDecoderLayer(nn.Module):
         for n, m in self.named_parameters():
             if n.find('bound_factor') > -1 or n.find(template) > -1:
                 params.append(m)
-        return iter(params)  
-    
+        return iter(params)
+
     def omni_state_dict(self, destination=None, prefix='', keep_vars=False):
         if destination is None:
             destination = OrderedDict()
@@ -598,7 +595,7 @@ class QuantLlamaDecoderLayer(nn.Module):
             if name.find('smooth') > -1 or name.find('bound_factor') > -1:
                 destination[prefix + name] = param if keep_vars else param.detach()
         return destination
-    
+
     def register_scales_and_zeros(self):
         for name, module in self.named_modules():
             if isinstance(module, (QuantLinear, QuantMoE)):

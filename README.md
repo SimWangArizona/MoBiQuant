@@ -1,97 +1,219 @@
-# MoBiQuant
+<p align="center">
+  <img src="assets/mobiquant-banner.png" alt="MoBiQuant: Mixture-of-Bits Quantization for Token-Adaptive Any-Precision LLM" width="100%">
+</p>
 
-Selected BitMoE training and evaluation code from BitMoEV2 branch `buildq2`, commit `7d493d8ffe7a4367b8f99375a9599547dab5ce99`. The original checkout is untouched. `MIGRATION_MANIFEST.json` records initial import hashes; targeted fixes made only in this destination repository are described in `validation/FEATURE_AUDIT.md`.
+This is the official implementation of **MoBiQuant: Mixture-of-Bits Quantization for
+Token-Adaptive Any-Precision LLM** ([paper](https://arxiv.org/abs/2602.20191)).
 
-## Architecture
+<p align="center">
+  <a href="https://arxiv.org/abs/2602.20191"><img src="https://img.shields.io/badge/arXiv-2602.20191-B31B1B?style=for-the-badge&amp;logo=arxiv&amp;logoColor=white" alt="Read the paper on arXiv"></a>
+  &nbsp;
+  <a href="https://huggingface.co/Simwang/MoBiQuant"><img src="https://img.shields.io/badge/Hugging%20Face-Checkpoints-333333?style=for-the-badge&amp;logo=huggingface&amp;logoColor=FFD21E" alt="Download checkpoints on Hugging Face"></a>
+  &nbsp;
+  <a href="https://simwangarizona.github.io/MoBiQuant_Page/"><img src="https://img.shields.io/badge/Project-Page-2563EB?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="Visit the project page"></a>
+</p>
 
-`main_bitmoe.py` + `parser.py` → `models/LMClass.py` and `datautils.py` → `quantize/bitmoequant_llama3.py` → `models/int_llama_layer.py` → `quantize/int_moe.py` and `quantize/quantizer.py`.
 
-With `--slice_bits_list 2 2 2 2` and without `--onlymlp`, all decoder layers use BitMoE for Attention q/k/v/o and MLP gate/up/down projections. Embeddings, norms and the language head are not converted to MoE. Experts represent base quantization plus routed residual weights, rather than native Mixtral experts. Mixtral is unsupported by the active workflow.
+## News
 
-## Environment
+- **2026/10/16** — Code and [checkpoints](https://huggingface.co/Simwang/MoBiQuant) released; [project page](https://simwangarizona.github.io/MoBiQuant_Page/) is online!
+- **2026/09/24** — MoBiQuant accepted to **NeurIPS**! 🎉
 
-The source machine's working environment is `omniquant`: Python 3.10.18, PyTorch 2.8.0+cu128, Transformers 4.56.1. `omniquant2` uses Transformers 4.33.0 and fails the active code's `LlamaRotaryEmbedding(config=...)` call. Additional runtime package versions are recorded in `validation/environment.json`.
+## 1. Install dependencies
 
-On the source machine:
+### Create the environment
 
-```bash
-conda activate omniquant
-python validation/gpu_smoke.py
-```
-
-For a new environment, install a suitable CUDA PyTorch build and the project dependencies from `pyproject.toml`; `termcolor` and the validated Transformers 4.56.1 pin are now included in project dependencies. Use `pip install -r requirements-validated.lock` for the tested direct package versions, selecting a suitable PyTorch CUDA build for the machine. Transitive dependencies are resolved by pip; this is not a full environment lock. AutoGPTQ is optional for this floating-point simulation workflow; its absence prints a message. Real packed quantization has not been validated.
-
-## Evaluation compatibility
-
-The complete `evaluate()`, `collect_moe_stats()` and `calibrate_router_threshold()` functions are restored verbatim from source buildq2. PPL loss, denominator, sequence iteration and `--limit` behavior are unchanged. Use default `--limit -1` and `--seqlen 2048` for the original evaluation protocol. JSON/CSV export occurs outside these functions.
-
-Archived real-model results were generated before this restoration, with a modified evaluator and short/limited sequences. They only document historical workflow smoke checks and must not be used for paper reproduction or as results from the restored evaluator. See `validation/real-model-results/README.md`.
-
-## Recommended four-model workflow
-
-Use `scripts/bitmoe/run.py` for the audited workflow. Presets are `llama2-7b`, `llama3-1b` (Llama-3.2-1B), `llama3-3b` (Llama-3.2-3B base), and `llama3-8b` (Llama-3-8B). Each trains with `--target_bit 3`, all Attention and MLP projections in MoE mode, and saves to `log/<preset>-target3` by default. This is a training objective, not a guarantee that learned routing reaches exactly 3 bits.
+Tested with **Python 3.10.18**, **PyTorch 2.8.0 + CUDA 12.8**, and **Transformers 4.56.1**.
+Run all commands from the repository root.
 
 ```bash
-conda activate omniquant
-python scripts/bitmoe/run.py train llama2-7b --gpu 0
-python scripts/bitmoe/run.py sweep llama2-7b --gpu 0
+git clone https://github.com/SimWangArizona/MoBiQuant.git
+cd MoBiQuant
+
+conda create -n mobiquant python=3.10.18 -y
+conda activate mobiquant
+
+pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
+pip install -r requirements.txt
+pip install -e . --no-deps
 ```
 
-Shell equivalents are `bash scripts/bitmoe/train_target3.sh llama2-7b --gpu 0` and `bash scripts/bitmoe/sweep_eval.sh llama2-7b --gpu 0`. Replace `llama2-7b` with any other preset for the same workflow. `--model`, `--checkpoint`, `--output`, `--epochs`, `--nsamples`, `--seqlen` and `--limit` are configurable. Use `--dry-run` to inspect commands. Sweep defaults to 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8 bits; use `--bits 2 3 4 5 6 7 8` to choose points.
+[requirements.txt](requirements.txt) pins the runtime packages from the working `omniquant` environment. It excludes unrelated tools installed in that environment.
+The CUDA wheel follows the [official PyTorch installation command](https://pytorch.org/get-started/previous-versions/#v280).
 
-Results are written incrementally to `results/<preset>/sweep/bits-performance.csv` with `target_bit_eval,actual_bits,wikitext2_ppl,moe_modules,status,metrics_file,log_file`. Each point has its own `metrics.json` and `eval.log`. Runs fail on subprocess errors or missing/invalid metrics, preserve completed rows, and refuse to overwrite nonempty output directories. Metrics come from JSON, not grep of a shared log. Actual bits follow original buildq2 statistics: the mean over MoE projections for the last calibration sample (not a parameter-weighted storage bit rate). The 2-bit endpoint disables residual experts and records exactly 2 bits.
-
-The shell scripts below are retained historical experiments, not the recommended four-model workflow. In particular the legacy 1B script named w3 actually targets about 4.1 bits, and old sweeps have mismatched checkpoint paths and fragile log extraction.
-
-## Low-level train and evaluate
-
-Run from the repository root. Replace model, GPU and output paths as needed. Original model weights and Hugging Face dataset access/cache are required for real model runs.
+### Check CUDA and log in
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python main_bitmoe.py \
-  --model /mnt/fast7T/models/Llama-3-8B \
-  --output_dir ./log/Llama-3-8B-bitmoe \
-  --wbits 2 --abits 16 --group_size 128 \
-  --slice_bits_list 2 2 2 2 --stage_weight 1.0 1.33 \
-  --epochs 20 --batch_size 1 --lwc --lwc_lr 1e-3 \
-  --bitmoe_lr 8e-5 --reg_weight 8e-5 \
-  --target_bit 3 --eval_ppl
+python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+hf auth login
 ```
 
-Restore trained parameters and evaluate at a target average bit rate:
+A CUDA GPU is required for training and evaluation. Accept the relevant Meta model access terms on Hugging Face before downloading gated base models. AutoGPTQ and W&B are not required for these commands.
+
+## 2. Download the original models
+
+### Exact model variants
+
+Use these **Base** models. The presets do not use Instruct models or Llama-3.1.
+
+| Preset | Original Hugging Face model | Local folder under `MODEL_ROOT` |
+|---|---|---|
+| `llama2-7b` | [meta-llama/Llama-2-7b-hf](https://huggingface.co/meta-llama/Llama-2-7b-hf) | `Llama-2-7b-hf` |
+| `llama3-8b` | [meta-llama/Meta-Llama-3-8B](https://huggingface.co/meta-llama/Meta-Llama-3-8B) | `Llama-3-8B` |
+| `llama3-1b` | [meta-llama/Llama-3.2-1B](https://huggingface.co/meta-llama/Llama-3.2-1B) | `Llama-3.2-1B` |
+| `llama3-3b` | [meta-llama/Llama-3.2-3B](https://huggingface.co/meta-llama/Llama-3.2-3B) | `Llama-3.2-3B` |
+
+### Choose the model location and download
+
+**Replace the path below with your model directory.** Existing local models can be reused with the folder names above.
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python main_bitmoe.py \
-  --model /mnt/fast7T/models/Llama-3-8B \
-  --resume ./log/Llama-3-8B-bitmoe --output_dir ./log/eval \
-  --epochs 0 --wbits 2 --abits 16 --group_size 128 \
-  --slice_bits_list 2 2 2 2 --target_bit_eval 4 --eval_ppl
+export MOBIQUANT_MODEL_ROOT="$PWD/pretrained_models"
+# To reuse the original local models instead:
+# export MOBIQUANT_MODEL_ROOT="/mnt/fast7T/models"
+
+hf download meta-llama/Llama-2-7b-hf \
+  --revision 01c7f73d771dfac7d292323805ebc428287df4f9 \
+  --local-dir "$MOBIQUANT_MODEL_ROOT/Llama-2-7b-hf" \
+  --include "*.safetensors" "*.json" "tokenizer.model"
+
+hf download meta-llama/Meta-Llama-3-8B \
+  --revision 8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920 \
+  --local-dir "$MOBIQUANT_MODEL_ROOT/Llama-3-8B" \
+  --include "*.safetensors" "*.json"
+
+hf download meta-llama/Llama-3.2-1B \
+  --revision 4e20de362430cd3b72f300e6b0f18e50e7166e08 \
+  --local-dir "$MOBIQUANT_MODEL_ROOT/Llama-3.2-1B" \
+  --include "*.safetensors" "*.json"
+
+hf download meta-llama/Llama-3.2-3B \
+  --revision 13afe5124825b4f3751f836b40dafda64c1ed062 \
+  --local-dir "$MOBIQUANT_MODEL_ROOT/Llama-3.2-3B" \
+  --include "*.safetensors" "*.json"
 ```
 
-Directory resume requires `omni_parameters.pth`, `router_parameters.pth` and `router_stats.pth`. These contain calibration/router state, not the base model. Even `--epochs 0` loads calibration data. Use the same model and quantization geometry as training. Add `--tasks arc_easy,arc_challenge,boolq,hellaswag,winogrande,piqa` for downstream evaluation.
+Download only the models you need. These pinned revisions match the original local model and tokenizer configurations; see [model configuration](workflows/_config.py).
 
-## Retained experiment scripts
+## 3. Reproduce the paper evaluation
 
-- `scripts/Llama-3-8b/`: 8B training, restored zero-shot evaluation and bit/PPL sweeps.
-- `scripts/Llama-3-3b-change/`: 3B training and evaluation.
-- `scripts/Llma-3-1b-change/`: 1B training and evaluation (original directory spelling retained).
-- `scripts/Llama-2-7B-change/`: Llama-2 7B training and evaluation.
+### Run a fine-grained sweep
 
-Only scripts invoking `main_bitmoe.py` are retained. They are historical configurations: inspect hardcoded GPUs, paths and checkpoint names before running. Script names such as w3/w4 describe experiment targets, not necessarily `--wbits`, which is usually 2 here.
+Each model's script automatically downloads its `omni_parameters.pth` and `router_parameters.pth` from **[Simwang/MoBiQuant](https://huggingface.co/Simwang/MoBiQuant)**, then runs WikiText2 evaluation.
+The original base model must already be available at the location configured in Section 2.
 
-## Known implementation limits
+```bash
+bash scripts/llama2-7b/finegrained-sweep-eval.sh --gpu 0
+bash scripts/llama3-8b/finegrained-sweep-eval.sh --gpu 0
+bash scripts/llama3-1b/finegrained-sweep-eval.sh --gpu 0
+bash scripts/llama3-3b/finegrained-sweep-eval.sh --gpu 0
+```
 
-- The active layer is `models/int_llama_layer.py`. Alternative whole-MoE/LWC modules are retained for reference; changing their import changes the architecture.
-- `--attnbits` does not change the active default Attention implementation. It is used by the inactive LWC variant.
-- W&B imports are commented out in the active entry/calibration files. Leave `--wandb` disabled. W&B sweep launchers are excluded.
-- Router threshold calibration moves the whole model to one GPU before evaluation, even with `--multigpu`.
-- Residual experts use floating-point matrix multiplications with masked inputs. This code does not establish packed low-bit memory savings or sparse compute speedups.
-- The tested smoke model is synthetic and small. The feature audit runs reduced real-weight WikiText checks separately; these do not establish production training convergence or full-test-set PPL.
+Run the command for the model you want to evaluate. Each sweep covers **2.0–8.0 target bits in steps of 0.1: 61 points**.
 
-## Migration and validation
+| Setting | Value |
+|---|---|
+| Calibration dataset | WikiText2 |
+| Calibration samples | 128 |
+| Seed | 2 |
+| Sequence length | 2048 |
+| Test evaluation | Full (`--limit -1`) |
+| Parameter download | `checkpoints/<preset>/` |
 
-`MIGRATION_MANIFEST.json` records source commit and SHA-256 for every copied file. Core source, model/quantization helpers, bundled `lm_eval`, license and relevant BitMoE shell experiments are included. Models/quantization directories retain compatibility variants because the entry imports OPT/Falcon modules as well as LLaMA helpers.
+WikiText2 is downloaded automatically on first use. Each point reloads the published checkpoint and recalibrates routing as applicable. Evaluation requires only the two parameter files, without `router_stats.pth`.
 
-Excluded: untracked working files, `.aws`, `.codex`, git history, credentials, pretrained weights, datasets/cache, experiment outputs, notebooks/visualizations, legacy OmniQuant entrypoints and unrelated/broken legacy shell launchers. No remote or source file was changed in the original checkout.
+### Override paths or preview the sweep
 
-`validation/gpu_smoke.py` validates both training stages with backward passes, routed inference across all seven projections, actual layer-wise calibration on a complete synthetic LLaMA model, three checkpoint files, restore, threshold calibration and matching restored logits. Results are in `validation/gpu-smoke.log`. Python syntax, shell syntax and source hashes are checked separately.
+```bash
+# Replace /path/to/base/model with the matching original model directory.
+bash scripts/llama3-1b/finegrained-sweep-eval.sh \
+  --model /path/to/base/model \
+  --checkpoint-root checkpoints \
+  --output results/custom-llama3-1b \
+  --gpu 0
+
+# Preview all 61 commands without downloading or running evaluation:
+bash scripts/llama3-1b/finegrained-sweep-eval.sh --dry-run
+```
+
+### Read the results
+
+Each model writes `results/<preset>/finegrained-sweep-eval/`:
+
+| File | Contents |
+|---|---|
+| `bits-performance.csv` | Target bits, actual bits, WikiText2 PPL, and run status |
+| `bits-<target>/metrics.json` | Per-point metrics |
+| `bits-<target>/eval.log` | Per-point log |
+| `sweep-plan.json` | Download revision and all evaluation commands |
+
+Use **actual bits** when comparing bit–PPL curves. This statistic averages over projections on the final calibration sample; it is not a parameter-weighted storage estimate.
+Existing nonempty output directories are not overwritten; choose a new `--output` for another run.
+
+## 4. Train your own parameters
+
+### Train from the original base model
+
+Training starts from the original pretrained model, **without loading MoBiQuant `.pth` files or resuming a checkpoint**.
+These presets use the training recipes recorded in the released checkpoints' logs.
+After training succeeds, each `train.sh` automatically evaluates its **newly trained parameters** at **2.0–8.0 target bits, step 0.1 (61 points)**. This sweep uses the saved local checkpoint without downloading the published HF parameters.
+
+```bash
+bash scripts/llama2-7b/train.sh --gpu 0
+bash scripts/llama3-8b/train.sh --gpu 0
+bash scripts/llama3-1b/train.sh --gpu 0
+bash scripts/llama3-3b/train.sh --gpu 0
+```
+
+Run the command for the model you want to train. All recipes use WikiText2, 128 samples, batch size 1, 20 epochs, group size 128, and bit slices `[2, 2, 2, 2]`.
+Attention q/k/v/o and MLP gate/up/down projections use routed residual slices.
+
+| Preset | Router LR | LWC LR | Regularization weight | Stage weights | Target activation ratio |
+|---|---:|---:|---:|---|---:|
+| `llama2-7b` | 5e-6 | 1e-2 | 1e-5 | `[1.0, 1.3]` | 0.16 |
+| `llama3-8b` | 5e-6 | 1e-2 | 1e-5 | `[1.0, 1.3]` | 0.16 |
+| `llama3-1b` | 8e-5 | 1e-3 | 8e-5 | `[1.0, 1.33]` | 0.15 |
+| `llama3-3b` | 4e-5 | 1e-3 | 4e-5 | `[1.0, 1.33]` | 0.15 |
+
+### Choose an output location
+
+```bash
+bash scripts/llama3-1b/train.sh \
+  --model /path/to/base/model \
+  --output log/my-llama3-1b \
+  --sweep-output results/my-llama3-1b \
+  --gpu 0
+
+# Inspect both the training and post-training sweep commands:
+bash scripts/llama3-1b/train.sh --dry-run
+```
+
+Default training output: `log/retrained-<preset>/`.
+Default sweep output: `<training output>/finegrained-sweep-eval/`, including `bits-performance.csv` and per-point metrics/logs.
+The overall sweep log is `<training output>/sweep.log`.
+
+Training saves `omni_parameters.pth`, `router_parameters.pth`, `router_stats.pth`, the selected recipe, and logs. Original base-model weights are kept separately.
+
+### Run only training or reevaluate saved parameters
+
+```bash
+# Save parameters without automatically running the sweep:
+bash scripts/llama3-1b/train.sh --gpu 0 --skip-sweep
+
+# Run the same 61-point sweep on an existing trained checkpoint:
+bash scripts/llama3-1b/finegrained-sweep-eval.sh \
+  --checkpoint log/retrained-llama3-1b \
+  --output results/retrained-llama3-1b \
+  --gpu 0
+```
+
+If training fails or parameter files are missing, the automatic sweep does not start. If evaluation fails, the trained checkpoint is preserved; rerun evaluation with a new `--output` directory.
+
+Exact training settings and source log names are retained in [training_recipes.json](workflows/training_recipes.json).
+
+The `scripts/` directory contains exactly these two launchers per model. Their shared implementation lives in `workflows/`.
+
+## Open Source TODO
+
+- ✅ Algorithm and fake quantization
+- ⬜ Kernels and packed checkpoints
