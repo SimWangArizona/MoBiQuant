@@ -29,7 +29,7 @@ def main():
     parser.add_argument('--epochs', type=int, default=40)
     parser.add_argument('--nsamples', type=int, default=128)
     parser.add_argument('--seqlen', type=int, default=2048)
-    parser.add_argument('--limit', type=int, default=-1, help='Maximum PPL sequences; -1 evaluates all')
+    parser.add_argument('--limit', type=int, default=-1, help='Original buildq2 limit behavior; use -1 for full/paper evaluation')
     parser.add_argument('--bits', type=float, nargs='+', default=[2, 2.5, 3, 3.5, 4, 5, 6, 7, 8])
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()

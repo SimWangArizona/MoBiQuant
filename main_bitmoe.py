@@ -55,13 +55,11 @@ def collect_moe_stats(lm, args, dataloader, logger):
         if isinstance(module, QuantMoE):
             module.Mask_Router.to(dev)
 
-    sampled_bits = []
     # Run forward passes on calibration data to update router statistics
     for i, batch in enumerate(dataloader):
         if i >= args.nsamples: # only across args.nsamples
             break
         _ = lm.model(batch[0].to(dev))
-        sampled_bits.extend(module.get_effective_bits() for module in lm.model.modules() if isinstance(module, QuantMoE))
 
     # Collect statistics from all QuantMoE modules
     all_sparsity = []
@@ -96,7 +94,7 @@ def collect_moe_stats(lm, args, dataloader, logger):
 
     if all_sparsity:
         avg_sparsity = sum(all_sparsity) / len(all_sparsity)
-        avg_eff_bits = sum(sampled_bits) / len(sampled_bits)
+        avg_eff_bits = sum(all_eff_bits) / len(all_eff_bits)
 
         logger.info("=" * 80)
         logger.info(f"QuantMoE Statistics (collected over {args.nsamples} samples):")
@@ -192,9 +190,6 @@ def collect_moe_stats(lm, args, dataloader, logger):
             percentage = (count / total_tokens) * 100
             logger.info(f"Bits: {bit}, Tokens: {count}, Percentage: {percentage:.2f}%")
         logger.info("=" * 80)
-
-    return {"actual_bits": avg_eff_bits, "moe_modules": len(all_eff_bits),
-            "bits_measurement": "calibration mean over samples and MoE projections"} if all_eff_bits else {}
 
 
 @torch.no_grad()
@@ -389,11 +384,6 @@ def evaluate(lm, args, logger):
         lm.model.config.use_cache = False
         lm.model.eval()
         nlls = []
-        evaluated_tokens = 0
-        if args.limit > 0:
-            nsamples = min(nsamples, args.limit)
-        if nsamples == 0:
-            raise ValueError("Evaluation text is shorter than --seqlen")
         for i in tqdm(range(nsamples)):
             batch = testenc[:, (i * lm.seqlen) : ((i + 1) * lm.seqlen)].to(lm.device)
             if "opt" in args.net.lower():
@@ -408,15 +398,17 @@ def evaluate(lm, args, logger):
             shift_labels = testenc[:, (i * lm.seqlen) : ((i + 1) * lm.seqlen)][
                 :, 1:
             ].to(lm.model.lm_head.weight.device)
-            loss_fct = nn.CrossEntropyLoss(reduction="sum")
+            loss_fct = nn.CrossEntropyLoss()
             loss = loss_fct(
                 shift_logits.view(-1, shift_logits.size(-1)),
                 shift_labels.view(-1),
             )
-            nlls.append(loss.float())
-            evaluated_tokens += shift_labels.numel()
+            neg_log_likelihood = loss.float() * lm.seqlen
+            nlls.append(neg_log_likelihood)
+            if i == args.limit:
+                break
 
-        ppl = torch.exp(torch.stack(nlls).sum() / evaluated_tokens)
+        ppl = torch.exp(torch.stack(nlls).sum() / (nsamples * lm.seqlen))
         logger.info(f'{dataset} : {ppl.item()}')
         lm.model.config.use_cache = use_cache
         results[dataset] = ppl.item()
@@ -599,7 +591,12 @@ def main():
     if args.slice_bits_list is not None and (args.target_bit_eval != 2.0):
         calibrate_router_threshold(lm, args, dataloader, logger)
         results = evaluate(lm, args, logger)
-        results.update(collect_moe_stats(lm, args, dataloader, logger))
+        collect_moe_stats(lm, args, dataloader, logger)
+        moe_modules = [m for m in lm.model.modules() if isinstance(m, QuantMoE)]
+        if moe_modules:
+            results.update(actual_bits=sum(m.get_effective_bits() for m in moe_modules) / len(moe_modules),
+                           moe_modules=len(moe_modules),
+                           bits_measurement="original buildq2 statistics: last calibration sample, mean over projections")
     else:
         results = evaluate(lm, args, logger)
         if args.slice_bits_list is not None:

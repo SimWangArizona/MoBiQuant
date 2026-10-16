@@ -1,3 +1,11 @@
+# Evaluation restoration notice
+
+At the user's request, the evaluator changes described in the historical audit below have been reverted. `evaluate()`, `collect_moe_stats()` and `calibrate_router_threshold()` now match original buildq2 verbatim. JSON/CSV export is outside these functions; actual bits use original last-sample statistics. No original source checkout was modified.
+
+The original PPL normalization and limit behavior are preserved for paper compatibility. The earlier limited-sample numbers in this directory were produced by the superseded evaluator and are not paper reproduction results. `metrics_checks.py` now checks exact source compatibility instead of enforcing changed numerical semantics.
+
+---
+
 # Four-model feature audit
 
 ## Findings in initial import

@@ -21,6 +21,12 @@ python validation/gpu_smoke.py
 
 For a new environment, install a suitable CUDA PyTorch build and the project dependencies from `pyproject.toml`; `termcolor` and the validated Transformers 4.56.1 pin are now included in project dependencies. Use `pip install -r requirements-validated.lock` for the tested direct package versions, selecting a suitable PyTorch CUDA build for the machine. Transitive dependencies are resolved by pip; this is not a full environment lock. AutoGPTQ is optional for this floating-point simulation workflow; its absence prints a message. Real packed quantization has not been validated.
 
+## Evaluation compatibility
+
+The complete `evaluate()`, `collect_moe_stats()` and `calibrate_router_threshold()` functions are restored verbatim from source buildq2. PPL loss, denominator, sequence iteration and `--limit` behavior are unchanged. Use default `--limit -1` and `--seqlen 2048` for the original evaluation protocol. JSON/CSV export occurs outside these functions.
+
+Archived real-model results were generated before this restoration, with a modified evaluator and short/limited sequences. They only document historical workflow smoke checks and must not be used for paper reproduction or as results from the restored evaluator. See `validation/real-model-results/README.md`.
+
 ## Recommended four-model workflow
 
 Use `scripts/bitmoe/run.py` for the audited workflow. Presets are `llama2-7b`, `llama3-1b` (Llama-3.2-1B), `llama3-3b` (Llama-3.2-3B base), and `llama3-8b` (Llama-3-8B). Each trains with `--target_bit 3`, all Attention and MLP projections in MoE mode, and saves to `log/<preset>-target3` by default. This is a training objective, not a guarantee that learned routing reaches exactly 3 bits.
@@ -33,7 +39,7 @@ python scripts/bitmoe/run.py sweep llama2-7b --gpu 0
 
 Shell equivalents are `bash scripts/bitmoe/train_target3.sh llama2-7b --gpu 0` and `bash scripts/bitmoe/sweep_eval.sh llama2-7b --gpu 0`. Replace `llama2-7b` with any other preset for the same workflow. `--model`, `--checkpoint`, `--output`, `--epochs`, `--nsamples`, `--seqlen` and `--limit` are configurable. Use `--dry-run` to inspect commands. Sweep defaults to 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8 bits; use `--bits 2 3 4 5 6 7 8` to choose points.
 
-Results are written incrementally to `results/<preset>/sweep/bits-performance.csv` with `target_bit_eval,actual_bits,wikitext2_ppl,moe_modules,status,metrics_file,log_file`. Each point has its own `metrics.json` and `eval.log`. Runs fail on subprocess errors or missing/invalid metrics, preserve completed rows, and refuse to overwrite nonempty output directories. Metrics come from JSON, not grep of a shared log. Actual bits are the mean over calibration samples and MoE projections (not a parameter-weighted storage bit rate). The 2-bit endpoint disables residual experts and records exactly 2 bits.
+Results are written incrementally to `results/<preset>/sweep/bits-performance.csv` with `target_bit_eval,actual_bits,wikitext2_ppl,moe_modules,status,metrics_file,log_file`. Each point has its own `metrics.json` and `eval.log`. Runs fail on subprocess errors or missing/invalid metrics, preserve completed rows, and refuse to overwrite nonempty output directories. Metrics come from JSON, not grep of a shared log. Actual bits follow original buildq2 statistics: the mean over MoE projections for the last calibration sample (not a parameter-weighted storage bit rate). The 2-bit endpoint disables residual experts and records exactly 2 bits.
 
 The shell scripts below are retained historical experiments, not the recommended four-model workflow. In particular the legacy 1B script named w3 actually targets about 4.1 bits, and old sweeps have mismatched checkpoint paths and fragile log extraction.
 

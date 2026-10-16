@@ -1,24 +1,14 @@
-"""PPL normalization regression: uniform logits must yield vocabulary-size PPL."""
-import logging
+"""Ensure paper-sensitive evaluation functions match original buildq2 exactly."""
+import ast
 from pathlib import Path
-import sys
-from types import SimpleNamespace
-from unittest.mock import patch
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import torch
-from transformers import LlamaConfig, LlamaForCausalLM
-from main_bitmoe import evaluate
-config=LlamaConfig(vocab_size=32,hidden_size=16,intermediate_size=32,num_hidden_layers=1,num_attention_heads=2,num_key_value_heads=2)
-config._attn_implementation='eager'
-model=LlamaForCausalLM(config).eval()
-with torch.no_grad():
-    for p in model.parameters(): p.zero_()
-lm=SimpleNamespace(model=model,device=torch.device('cpu'),seqlen=8)
-args=SimpleNamespace(multigpu=False,net='Llama-test',tasks='',seed=2,model='synthetic/Llama',limit=1,wandb=False)
-loader=SimpleNamespace(input_ids=torch.arange(32).reshape(1,-1))
-with patch('main_bitmoe.get_loaders', return_value=([],loader)):
-    for limit in [1,2,-1]:
-        args.limit=limit
-        result=evaluate(lm,args,logging.getLogger('ppl-test'))
-        assert abs(result['wikitext2']-32)<1e-4,result
-print('PASS uniform-logit PPL normalization with 1, 2 and all evaluation sequences')
+import subprocess
+root=Path(__file__).resolve().parents[1]
+original=subprocess.check_output(['git','show','1224843:main_bitmoe.py'],cwd=root,text=True)
+current=(root/'main_bitmoe.py').read_text()
+for name in ['evaluate','collect_moe_stats','calibrate_router_threshold']:
+    def extract(text):
+        node=next(n for n in ast.parse(text).body if isinstance(n,ast.FunctionDef) and n.name==name)
+        start=min([node.lineno]+[d.lineno for d in node.decorator_list])-1
+        return ''.join(text.splitlines(keepends=True)[start:node.end_lineno])
+    assert extract(current)==extract(original),name
+    print('PASS verbatim original buildq2 function:',name)
