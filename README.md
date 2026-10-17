@@ -2,6 +2,13 @@
   <img src="assets/mobiquant-banner.png" alt="MoBiQuant: Mixture-of-Bits Quantization for Token-Adaptive Any-Precision LLM" width="100%">
 </p>
 
+<p align="center">
+  <a href="README.md"><img src="https://img.shields.io/badge/English-374151?style=for-the-badge" alt="English"></a>
+  &nbsp;
+  <a href="README_zh-CN.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-2563EB?style=for-the-badge" alt="简体中文"></a>
+</p>
+
+
 This is the official implementation of **MoBiQuant: Mixture-of-Bits Quantization for
 Token-Adaptive Any-Precision LLM** ([paper](https://arxiv.org/abs/2602.20191)).
 
